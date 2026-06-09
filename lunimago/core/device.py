@@ -1,4 +1,5 @@
 """Auto-detect the best available compute device."""
+
 from __future__ import annotations
 
 import torch
@@ -12,6 +13,7 @@ def resolve_device(preference: str | None = None) -> torch.device:
     if preference and preference != "auto":
         if preference == "directml":
             import torch_directml
+
             return torch_directml.device()
         return torch.device(preference)
 
@@ -20,6 +22,7 @@ def resolve_device(preference: str | None = None) -> torch.device:
 
     try:
         import torch_directml
+
         if torch_directml.is_available():
             return torch_directml.device()
     except ImportError:

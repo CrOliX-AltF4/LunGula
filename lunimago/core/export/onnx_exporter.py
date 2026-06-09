@@ -1,4 +1,5 @@
 """Export a trained model to ONNX for cross-platform inference."""
+
 from __future__ import annotations
 
 import torch

@@ -1,4 +1,5 @@
 """Tests for core.trainer — Trainer fit loop."""
+
 import os
 import pathlib
 
@@ -10,9 +11,9 @@ from lunimago.core.models.lstm_agent import LSTMAgent
 from lunimago.core.trainer import Trainer
 
 _FEATURE_DIM = 4
-_ACTION_DIM  = 2
-_WINDOW      = 8
-_N_SAMPLES   = 60
+_ACTION_DIM = 2
+_WINDOW = 8
+_N_SAMPLES = 60
 
 
 @pytest.fixture()
@@ -24,7 +25,7 @@ def tiny_dataset() -> TensorDataset:
 
 @pytest.fixture()
 def trainer() -> Trainer:
-    model  = LSTMAgent(feature_dim=_FEATURE_DIM, action_dim=_ACTION_DIM, hidden_size=32)
+    model = LSTMAgent(feature_dim=_FEATURE_DIM, action_dim=_ACTION_DIM, hidden_size=32)
     device = torch.device("cpu")
     return Trainer(model, device, lr=1e-3)
 
@@ -36,13 +37,11 @@ class TestTrainer:
         history = trainer.fit(tiny_dataset, epochs=3, batch_size=16)
         assert len(history) == 3
 
-    def test_history_has_required_keys(
-        self, trainer: Trainer, tiny_dataset: TensorDataset
-    ) -> None:
+    def test_history_has_required_keys(self, trainer: Trainer, tiny_dataset: TensorDataset) -> None:
         history = trainer.fit(tiny_dataset, epochs=1, batch_size=16)
         assert "epoch" in history[0]
         assert "train" in history[0]
-        assert "val"   in history[0]
+        assert "val" in history[0]
 
     def test_epoch_numbers_are_sequential(
         self, trainer: Trainer, tiny_dataset: TensorDataset
@@ -51,15 +50,13 @@ class TestTrainer:
         for i, entry in enumerate(history, start=1):
             assert entry["epoch"] == i
 
-    def test_loss_values_are_finite(
-        self, trainer: Trainer, tiny_dataset: TensorDataset
-    ) -> None:
+    def test_loss_values_are_finite(self, trainer: Trainer, tiny_dataset: TensorDataset) -> None:
         history = trainer.fit(tiny_dataset, epochs=2, batch_size=16)
         for entry in history:
             assert isinstance(entry["train"], float)
-            assert isinstance(entry["val"],   float)
+            assert isinstance(entry["val"], float)
             assert entry["train"] >= 0
-            assert entry["val"]   >= 0
+            assert entry["val"] >= 0
 
     def test_loss_does_not_increase_wildly(
         self, trainer: Trainer, tiny_dataset: TensorDataset

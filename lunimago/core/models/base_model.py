@@ -1,4 +1,5 @@
 """Abstract base for all lun'imago models."""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

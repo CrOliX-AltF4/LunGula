@@ -1,4 +1,5 @@
 """Tests for core.device — resolve_device auto-detection and explicit preferences."""
+
 import torch
 
 from lunimago.core.device import resolve_device

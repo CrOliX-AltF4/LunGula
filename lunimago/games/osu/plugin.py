@@ -1,4 +1,5 @@
 """osu! plugin entry point — wires parser + model for the CLI."""
+
 from __future__ import annotations
 
 import os
@@ -31,8 +32,10 @@ def collect_pairs(data_dir: str) -> list[tuple[str, str]]:
         osrs = [f for f in files if f.endswith(".osr")]
         osus = [f for f in files if f.endswith(".osu")]
         if osrs and osus:
-            pairs.append((
-                os.path.join(root, osrs[0]),
-                os.path.join(root, osus[0]),
-            ))
+            pairs.append(
+                (
+                    os.path.join(root, osrs[0]),
+                    os.path.join(root, osus[0]),
+                )
+            )
     return pairs

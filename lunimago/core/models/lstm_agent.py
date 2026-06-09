@@ -1,4 +1,5 @@
 """LSTM-based imitation learning agent — default model for all games."""
+
 from __future__ import annotations
 
 import torch
@@ -23,7 +24,7 @@ class LSTMAgent(BaseImitatonModel):
     ) -> None:
         super().__init__()
         self._feature_dim = feature_dim
-        self._action_dim  = action_dim
+        self._action_dim = action_dim
 
         self.lstm = nn.LSTM(
             input_size=feature_dim,
@@ -46,5 +47,5 @@ class LSTMAgent(BaseImitatonModel):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # x: (batch, window, feature_dim)
         out, _ = self.lstm(x)
-        last    = out[:, -1, :]          # take last timestep
+        last = out[:, -1, :]  # take last timestep
         return self.head(self.norm(last))

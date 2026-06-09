@@ -1,4 +1,5 @@
 """Generic training loop — game-agnostic."""
+
 from __future__ import annotations
 
 import torch
@@ -17,9 +18,9 @@ class Trainer:
         lr: float = 1e-3,
         val_split: float = 0.1,
     ) -> None:
-        self.model  = model.to(device)
+        self.model = model.to(device)
         self.device = device
-        self.opt    = torch.optim.AdamW(model.parameters(), lr=lr)
+        self.opt = torch.optim.AdamW(model.parameters(), lr=lr)
         self.loss_fn = nn.MSELoss()
         self.val_split = val_split
 
@@ -30,22 +31,23 @@ class Trainer:
         batch_size: int = 128,
         checkpoint_dir: str | None = None,
     ) -> list[dict]:
-        val_len   = max(1, int(len(dataset) * self.val_split))
+        val_len = max(1, int(len(dataset) * self.val_split))
         train_len = len(dataset) - val_len
         train_ds, val_ds = random_split(dataset, [train_len, val_len])
 
         train_dl = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
-        val_dl   = DataLoader(val_ds,   batch_size=batch_size)
+        val_dl = DataLoader(val_ds, batch_size=batch_size)
 
         history = []
         for epoch in range(1, epochs + 1):
             train_loss = self._epoch(train_dl, train=True)
-            val_loss   = self._epoch(val_dl,   train=False)
+            val_loss = self._epoch(val_dl, train=False)
             history.append({"epoch": epoch, "train": train_loss, "val": val_loss})
             print(f"[{epoch:03d}/{epochs}] train={train_loss:.5f}  val={val_loss:.5f}")
 
             if checkpoint_dir:
                 import os
+
                 os.makedirs(checkpoint_dir, exist_ok=True)
                 torch.save(
                     self.model.state_dict(),

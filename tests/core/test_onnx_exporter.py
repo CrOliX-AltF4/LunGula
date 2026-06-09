@@ -1,4 +1,5 @@
 """Tests for core.export.onnx_exporter — ONNX export and inference."""
+
 import os
 import pathlib
 
@@ -23,6 +24,7 @@ class TestOnnxExporter:
 
     def test_exported_model_is_loadable(self, model: LSTMAgent, tmp_path: pathlib.Path) -> None:
         import onnx
+
         path = str(tmp_path / "model.onnx")
         export_onnx(model, path, window=16)
         loaded = onnx.load(path)
@@ -41,9 +43,7 @@ class TestOnnxExporter:
         assert len(outputs) == 1
         assert outputs[0].shape == (1, 4)
 
-    def test_output_matches_torch_forward(
-        self, model: LSTMAgent, tmp_path: pathlib.Path
-    ) -> None:
+    def test_output_matches_torch_forward(self, model: LSTMAgent, tmp_path: pathlib.Path) -> None:
         import numpy as np
         import onnxruntime as ort
 

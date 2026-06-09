@@ -1,4 +1,5 @@
 """Tests for games.osu.parser — pure helpers and integration with synthetic data."""
+
 from __future__ import annotations
 
 import os
@@ -17,6 +18,7 @@ from lunimago.games.osu.parser import (
 )
 
 # ── _bisect_left ──────────────────────────────────────────────────────────────
+
 
 class TestBisectLeft:
     def test_empty_sequence(self) -> None:
@@ -43,13 +45,16 @@ class TestBisectLeft:
 
 # ── _align ────────────────────────────────────────────────────────────────────
 
+
 def _make_hit_objects(times: list[float]) -> list[dict]:
     return [{"x": 256.0, "y": 192.0, "time_ms": t} for t in times]
 
 
 def _make_replay_frames(times: list[float], keys: int = 0) -> list[dict]:
-    return [{"time_ms": t, "x": float(i * 10), "y": float(i * 5), "keys": keys}
-            for i, t in enumerate(times)]
+    return [
+        {"time_ms": t, "x": float(i * 10), "y": float(i * 5), "keys": keys}
+        for i, t in enumerate(times)
+    ]
 
 
 class TestAlign:
@@ -66,21 +71,21 @@ class TestAlign:
 
     def test_output_feature_shape(self) -> None:
         objects = _make_hit_objects([1000.0, 2000.0, 3000.0, 4000.0])
-        frames  = _make_replay_frames([0.0, 500.0, 1000.0, 1500.0, 2000.0])
-        result  = _align(objects, frames)
+        frames = _make_replay_frames([0.0, 500.0, 1000.0, 1500.0, 2000.0])
+        result = _align(objects, frames)
         assert len(result) > 0
         assert result[0].features.shape == (_FEATURE_DIM,)
 
     def test_output_action_shape(self) -> None:
         objects = _make_hit_objects([1000.0, 2000.0, 3000.0, 4000.0])
-        frames  = _make_replay_frames([0.0, 500.0, 1000.0, 1500.0, 2000.0])
-        result  = _align(objects, frames)
+        frames = _make_replay_frames([0.0, 500.0, 1000.0, 1500.0, 2000.0])
+        result = _align(objects, frames)
         assert result[0].action.shape == (_ACTION_DIM,)
 
     def test_click_encoded_in_action(self) -> None:
         objects = _make_hit_objects([500.0, 1000.0, 1500.0, 2000.0])
-        frames  = [
-            {"time_ms": 0.0,   "x": 256.0, "y": 192.0, "keys": 0},
+        frames = [
+            {"time_ms": 0.0, "x": 256.0, "y": 192.0, "keys": 0},
             {"time_ms": 500.0, "x": 260.0, "y": 190.0, "keys": 1},  # left click
             {"time_ms": 800.0, "x": 265.0, "y": 188.0, "keys": 2},  # right click
         ]
@@ -92,9 +97,9 @@ class TestAlign:
 
     def test_timestamps_are_monotonic(self) -> None:
         objects = _make_hit_objects([1000.0, 2000.0, 3000.0])
-        frames  = _make_replay_frames([0.0, 200.0, 500.0, 800.0, 1100.0])
-        result  = _align(objects, frames)
-        times   = [r.timestamp_ms for r in result]
+        frames = _make_replay_frames([0.0, 200.0, 500.0, 800.0, 1100.0])
+        result = _align(objects, frames)
+        times = [r.timestamp_ms for r in result]
         assert times == sorted(times)
 
 
@@ -129,9 +134,7 @@ SliderTickRate:1
 
 @pytest.fixture()
 def beatmap_file() -> Generator[str, None, None]:
-    with tempfile.NamedTemporaryFile(
-        mode="w", suffix=".osu", delete=False, encoding="utf-8"
-    ) as f:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".osu", delete=False, encoding="utf-8") as f:
         f.write(_MINIMAL_OSU)
         path = f.name
     yield path
@@ -167,6 +170,7 @@ class TestParseBeatmap:
 
 
 # ── OsuReplayParser properties ─────────────────────────────────────────────────
+
 
 class TestOsuReplayParser:
     def test_feature_dim(self) -> None:

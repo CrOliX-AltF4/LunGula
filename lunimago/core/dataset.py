@@ -1,4 +1,5 @@
 """Generic sequence dataset for imitation learning."""
+
 from __future__ import annotations
 
 import numpy as np
@@ -29,9 +30,9 @@ class ReplayDataset(Dataset):
             if len(frames) <= window:
                 continue
             features = np.stack([f.features for f in frames])
-            actions  = np.stack([f.action   for f in frames])
+            actions = np.stack([f.action for f in frames])
             for i in range(window, len(frames)):
-                self._samples.append((features[i - window:i], actions[i]))
+                self._samples.append((features[i - window : i], actions[i]))
 
     def __len__(self) -> int:
         return len(self._samples)

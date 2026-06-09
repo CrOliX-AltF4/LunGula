@@ -1,4 +1,5 @@
 """Tests for core.base_game — GameFrame, BaseReplayParser contract."""
+
 import numpy as np
 import pytest
 
@@ -35,15 +36,15 @@ class _ConcreteEncoder(BaseGameEncoder):
 class TestGameFrame:
     def test_construction(self) -> None:
         features = np.array([1.0, 2.0, 3.0], dtype=np.float32)
-        action   = np.array([0.5, -0.5], dtype=np.float32)
-        frame    = GameFrame(features=features, action=action, timestamp_ms=16.0)
+        action = np.array([0.5, -0.5], dtype=np.float32)
+        frame = GameFrame(features=features, action=action, timestamp_ms=16.0)
         assert frame.timestamp_ms == 16.0
         assert frame.features.shape == (3,)
         assert frame.action.shape == (2,)
 
     def test_fields_are_preserved(self) -> None:
         feat = np.array([0.1, 0.2], dtype=np.float32)
-        act  = np.array([1.0], dtype=np.float32)
+        act = np.array([1.0], dtype=np.float32)
         frame = GameFrame(features=feat, action=act, timestamp_ms=100.0)
         np.testing.assert_array_equal(frame.features, feat)
         np.testing.assert_array_equal(frame.action, act)
@@ -69,9 +70,9 @@ class TestBaseReplayParser:
 class TestBaseGameEncoder:
     def test_concrete_subclass_works(self) -> None:
         enc = _ConcreteEncoder()
-        state  = enc.encode_state({})
+        state = enc.encode_state({})
         action = enc.encode_action({})
-        assert state.shape  == (4,)
+        assert state.shape == (4,)
         assert action.shape == (2,)
 
     def test_abstract_cannot_be_instantiated(self) -> None:
