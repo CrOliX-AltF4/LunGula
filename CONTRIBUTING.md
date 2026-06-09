@@ -42,19 +42,19 @@ pip install -e ".[dev]"
 
 | Command                        | Description                              |
 |--------------------------------|------------------------------------------|
-| `lunaimago train --game osu …` | Train a model on replay data             |
+| `lunimago train --game osu …` | Train a model on replay data             |
 | `pytest`                       | Run all tests                            |
-| `pytest --cov=lunaimago`       | Run tests with coverage report           |
+| `pytest --cov=lunimago`       | Run tests with coverage report           |
 | `ruff check .`                 | Lint the codebase                        |
 | `ruff format .`                | Format the codebase                      |
-| `mypy lunaimago`               | Type-check                               |
+| `mypy lunimago`               | Type-check                               |
 
 ---
 
 ## Project structure
 
 ```
-lunaimago/
+lunimago/
 ├── core/
 │   ├── base_game.py        # BaseReplayParser, BaseGameEncoder, GameFrame
 │   ├── dataset.py          # ReplayDataset
@@ -65,7 +65,7 @@ lunaimago/
 └── games/
     └── osu/                # osu! plugin (parser + plugin entry point)
 tests/
-├── core/                   # tests mirroring lunaimago/core/
+├── core/                   # tests mirroring lunimago/core/
 └── games/osu/              # tests for the osu! plugin
 ```
 
@@ -84,7 +84,7 @@ tests/
 3. **Make sure** all checks pass locally:
 
    ```bash
-   ruff check . && mypy lunaimago && pytest
+   ruff check . && mypy lunimago && pytest
    ```
 
 4. **Open a Pull Request** targeting `master`.
@@ -144,13 +144,13 @@ docs(contributing): add game plugin guide
 ## Tests
 
 - Framework: **pytest**
-- Tests live in `tests/` (mirroring the `lunaimago/` structure)
+- Tests live in `tests/` (mirroring the `lunimago/` structure)
 - Unit tests must not touch real replay files — use fixtures with synthetic data
 - Name test files `test_*.py`
 
 ```bash
 pytest                      # run all tests
-pytest --cov=lunaimago      # with coverage
+pytest --cov=lunimago      # with coverage
 pytest tests/core/          # specific directory
 ```
 
@@ -158,13 +158,13 @@ pytest tests/core/          # specific directory
 
 ## Adding a game plugin
 
-1. Create `lunaimago/games/<your_game>/` with `parser.py` and `plugin.py`
+1. Create `lunimago/games/<your_game>/` with `parser.py` and `plugin.py`
 2. Implement `BaseReplayParser` in `parser.py`
 3. Implement `make_parser()`, `make_model()`, `collect_pairs()` in `plugin.py`
-4. Register the plugin in `lunaimago/cli.py` under `GAMES`
+4. Register the plugin in `lunimago/cli.py` under `GAMES`
 5. Add tests in `tests/games/<your_game>/`
 
-See the [osu! plugin](lunaimago/games/osu/) as a reference implementation.
+See the [osu! plugin](lunimago/games/osu/) as a reference implementation.
 
 ---
 

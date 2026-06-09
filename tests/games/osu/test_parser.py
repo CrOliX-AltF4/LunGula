@@ -6,7 +6,7 @@ import tempfile
 from collections.abc import Generator
 import numpy as np
 import pytest
-from lunaimago.games.osu.parser import (
+from lunimago.games.osu.parser import (
     _bisect_left,
     _align,
     _parse_beatmap,

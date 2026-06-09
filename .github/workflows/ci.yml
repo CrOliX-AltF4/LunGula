@@ -19,7 +19,7 @@ jobs:
       - run: pip install -e ".[dev]"
       - run: ruff check .
       - run: ruff format --check .
-      - run: mypy lunaimago
+      - run: mypy lunimago
 
   test:
     name: Tests (Python ${{ matrix.python-version }})
@@ -34,4 +34,4 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
       - run: pip install -e ".[dev]"
-      - run: pytest --cov=lunaimago --cov-report=term-missing
+      - run: pytest --cov=lunimago --cov-report=term-missing

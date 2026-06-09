@@ -2,8 +2,8 @@
 import numpy as np
 import torch
 import pytest
-from lunaimago.core.base_game import BaseReplayParser, GameFrame
-from lunaimago.core.dataset import ReplayDataset
+from lunimago.core.base_game import BaseReplayParser, GameFrame
+from lunimago.core.dataset import ReplayDataset
 
 _FEATURE_DIM = 6
 _ACTION_DIM  = 3

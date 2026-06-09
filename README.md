@@ -60,7 +60,7 @@ cd LunImago
 pip install -e ".[dev]"
 
 # Train on osu! replays (one map per subdirectory: replay.osr + beatmap.osu)
-lunaimago train --game osu --data ./data/replays --out ./checkpoints --export model.onnx
+lunimago train --game osu --data ./data/replays --out ./checkpoints --export model.onnx
 ```
 
 ---
@@ -84,8 +84,8 @@ Override with `--device cuda`, `--device directml`, `--device cpu`, etc.
 ## CLI
 
 ```bash
-lunaimago train --game osu --data ./replays          # train with defaults
-lunaimago train --game osu --data ./replays \
+lunimago train --game osu --data ./replays          # train with defaults
+lunimago train --game osu --data ./replays \
     --epochs 30 --batch 256 --window 48 \
     --device directml \
     --export model.onnx                              # full options
@@ -128,8 +128,8 @@ osu! replays are publicly available via the [osu! API](https://osu.ppy.sh/docs/i
 Implement two abstract classes and register a plugin module:
 
 ```python
-# lunaimago/games/my_game/parser.py
-from lunaimago.core.base_game import BaseReplayParser, GameFrame
+# lunimago/games/my_game/parser.py
+from lunimago.core.base_game import BaseReplayParser, GameFrame
 
 class MyGameParser(BaseReplayParser):
     @property
@@ -141,18 +141,18 @@ class MyGameParser(BaseReplayParser):
     def parse(self, replay_path: str, beatmap_path: str) -> list[GameFrame]:
         ...
 
-# lunaimago/games/my_game/plugin.py
+# lunimago/games/my_game/plugin.py
 def make_parser(): return MyGameParser()
 def make_model(): return LSTMAgent(feature_dim=12, action_dim=3)
 def collect_pairs(data_dir: str): ...
 ```
 
-Then register it in `lunaimago/cli.py`:
+Then register it in `lunimago/cli.py`:
 
 ```python
 GAMES: dict[str, str] = {
-    "osu":     "lunaimago.games.osu.plugin",
-    "my_game": "lunaimago.games.my_game.plugin",
+    "osu":     "lunimago.games.osu.plugin",
+    "my_game": "lunimago.games.my_game.plugin",
 }
 ```
 
@@ -161,7 +161,7 @@ GAMES: dict[str, str] = {
 ## Project structure
 
 ```
-lunaimago/
+lunimago/
 ├── core/
 │   ├── base_game.py        # BaseReplayParser, BaseGameEncoder, GameFrame
 │   ├── dataset.py          # ReplayDataset — sliding-window sequences

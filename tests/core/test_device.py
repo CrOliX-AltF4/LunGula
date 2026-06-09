@@ -1,7 +1,7 @@
 """Tests for core.device — resolve_device auto-detection and explicit preferences."""
 import torch
 import pytest
-from lunaimago.core.device import resolve_device
+from lunimago.core.device import resolve_device
 
 
 class TestResolveDevice:

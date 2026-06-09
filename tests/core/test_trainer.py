@@ -4,8 +4,8 @@ import pathlib
 import torch
 from torch.utils.data import TensorDataset
 import pytest
-from lunaimago.core.trainer import Trainer
-from lunaimago.core.models.lstm_agent import LSTMAgent
+from lunimago.core.trainer import Trainer
+from lunimago.core.models.lstm_agent import LSTMAgent
 
 _FEATURE_DIM = 4
 _ACTION_DIM  = 2

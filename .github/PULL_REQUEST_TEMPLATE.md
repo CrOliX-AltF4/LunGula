@@ -16,7 +16,7 @@
 
 - [ ] My code follows the project conventions (ruff + mypy)
 - [ ] I have added / updated the necessary tests
-- [ ] `mypy lunaimago` passes without errors
+- [ ] `mypy lunimago` passes without errors
 - [ ] `pytest` passes without errors
 - [ ] I have updated the documentation if needed
 

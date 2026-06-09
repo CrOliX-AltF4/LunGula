@@ -1,7 +1,7 @@
 """Tests for core.models — LSTMAgent forward pass and properties."""
 import torch
 import pytest
-from lunaimago.core.models.lstm_agent import LSTMAgent
+from lunimago.core.models.lstm_agent import LSTMAgent
 
 
 @pytest.fixture()

@@ -3,8 +3,8 @@ import os
 import pathlib
 import pytest
 import torch
-from lunaimago.core.models.lstm_agent import LSTMAgent
-from lunaimago.core.export.onnx_exporter import export_onnx
+from lunimago.core.models.lstm_agent import LSTMAgent
+from lunimago.core.export.onnx_exporter import export_onnx
 
 
 @pytest.fixture()
