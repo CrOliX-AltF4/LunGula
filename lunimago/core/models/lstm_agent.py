@@ -1,7 +1,9 @@
 """LSTM-based imitation learning agent — default model for all games."""
 from __future__ import annotations
+
 import torch
 import torch.nn as nn
+
 from .base_model import BaseImitatonModel
 
 

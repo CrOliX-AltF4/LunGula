@@ -1,6 +1,7 @@
 """Tests for core.models — LSTMAgent forward pass and properties."""
-import torch
 import pytest
+import torch
+
 from lunimago.core.models.lstm_agent import LSTMAgent
 
 

@@ -1,7 +1,8 @@
 """Tests for core.base_game — GameFrame, BaseReplayParser contract."""
 import numpy as np
 import pytest
-from lunimago.core.base_game import GameFrame, BaseReplayParser, BaseGameEncoder
+
+from lunimago.core.base_game import BaseGameEncoder, BaseReplayParser, GameFrame
 
 
 class _ConcreteParser(BaseReplayParser):

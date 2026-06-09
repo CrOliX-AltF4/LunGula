@@ -1,5 +1,6 @@
 """Auto-detect the best available compute device."""
 from __future__ import annotations
+
 import torch
 
 

@@ -1,11 +1,13 @@
 """Tests for core.trainer — Trainer fit loop."""
 import os
 import pathlib
+
+import pytest
 import torch
 from torch.utils.data import TensorDataset
-import pytest
-from lunimago.core.trainer import Trainer
+
 from lunimago.core.models.lstm_agent import LSTMAgent
+from lunimago.core.trainer import Trainer
 
 _FEATURE_DIM = 4
 _ACTION_DIM  = 2

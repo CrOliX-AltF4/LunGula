@@ -1,8 +1,10 @@
 """osu! plugin entry point — wires parser + model for the CLI."""
 from __future__ import annotations
+
 import os
-from .parser import OsuReplayParser, _FEATURE_DIM, _ACTION_DIM
+
 from ...core.models.lstm_agent import LSTMAgent
+from .parser import _ACTION_DIM, _FEATURE_DIM, OsuReplayParser
 
 
 def make_parser() -> OsuReplayParser:

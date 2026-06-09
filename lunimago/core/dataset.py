@@ -1,8 +1,10 @@
 """Generic sequence dataset for imitation learning."""
 from __future__ import annotations
+
 import numpy as np
 import torch
 from torch.utils.data import Dataset
+
 from .base_game import BaseReplayParser
 
 

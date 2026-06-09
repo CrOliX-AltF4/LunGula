@@ -1,8 +1,8 @@
 """lun'imago CLI — train --game osu --data ./replays"""
 from __future__ import annotations
+
 import argparse
 import sys
-
 
 GAMES: dict[str, str] = {
     "osu": "lunimago.games.osu.plugin",
@@ -34,10 +34,11 @@ def main() -> None:
 
 def _cmd_train(args: argparse.Namespace) -> None:
     import importlib
-    from lunimago.core.device  import resolve_device
-    from lunimago.core.trainer import Trainer
+
     from lunimago.core.dataset import ReplayDataset
+    from lunimago.core.device import resolve_device
     from lunimago.core.export.onnx_exporter import export_onnx
+    from lunimago.core.trainer import Trainer
 
     plugin = importlib.import_module(GAMES[args.game])
     parser  = plugin.make_parser()

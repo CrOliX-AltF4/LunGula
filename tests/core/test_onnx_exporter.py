@@ -1,10 +1,12 @@
 """Tests for core.export.onnx_exporter — ONNX export and inference."""
 import os
 import pathlib
+
 import pytest
 import torch
-from lunimago.core.models.lstm_agent import LSTMAgent
+
 from lunimago.core.export.onnx_exporter import export_onnx
+from lunimago.core.models.lstm_agent import LSTMAgent
 
 
 @pytest.fixture()

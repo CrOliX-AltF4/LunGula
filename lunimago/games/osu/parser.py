@@ -9,10 +9,12 @@ Each GameFrame encodes:
   action:   [cursor_dx, cursor_dy, left_click, right_click]     (4 dims)
 """
 from __future__ import annotations
+
 import lzma
 import struct
-import os
+
 import numpy as np
+
 from ...core.base_game import BaseReplayParser, GameFrame
 
 _FEATURE_DIM = 10
@@ -72,7 +74,8 @@ def _read_string(data: bytes, pos: int) -> tuple[str, int]:
     pos += 1  # skip 0x0b
     length, shift = 0, 0
     while True:
-        byte = data[pos]; pos += 1
+        byte = data[pos]
+        pos += 1
         length |= (byte & 0x7F) << shift
         shift += 7
         if not (byte & 0x80):
@@ -102,7 +105,8 @@ def _parse_replay(path: str) -> list[dict]:
 
     pos += 8  # timestamp
 
-    compressed_len = struct.unpack_from("<i", data, pos)[0]; pos += 4
+    compressed_len = struct.unpack_from("<i", data, pos)[0]
+    pos += 4
     compressed = data[pos:pos + compressed_len]
     raw = lzma.decompress(compressed).decode("utf-8", errors="ignore")
 

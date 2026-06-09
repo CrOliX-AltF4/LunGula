@@ -1,20 +1,20 @@
 """Tests for games.osu.parser — pure helpers and integration with synthetic data."""
 from __future__ import annotations
+
 import os
-import pathlib
 import tempfile
 from collections.abc import Generator
-import numpy as np
-import pytest
-from lunimago.games.osu.parser import (
-    _bisect_left,
-    _align,
-    _parse_beatmap,
-    OsuReplayParser,
-    _FEATURE_DIM,
-    _ACTION_DIM,
-)
 
+import pytest
+
+from lunimago.games.osu.parser import (
+    _ACTION_DIM,
+    _FEATURE_DIM,
+    OsuReplayParser,
+    _align,
+    _bisect_left,
+    _parse_beatmap,
+)
 
 # ── _bisect_left ──────────────────────────────────────────────────────────────
 

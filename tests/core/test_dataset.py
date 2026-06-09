@@ -1,7 +1,8 @@
 """Tests for core.dataset — ReplayDataset sliding-window logic."""
 import numpy as np
-import torch
 import pytest
+import torch
+
 from lunimago.core.base_game import BaseReplayParser, GameFrame
 from lunimago.core.dataset import ReplayDataset
 
