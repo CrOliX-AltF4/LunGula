@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "lunimago"
+version = "0.1.0"
+description = "Game imitation learning framework — behavior cloning from replays to ONNX"
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.0",
+    "onnx>=1.14",
+    "onnxruntime>=1.16",
+    "numpy>=1.24",
+    "pyyaml>=6.0",
+    "tqdm>=4.65",
+]
+
+[project.optional-dependencies]
+directml = ["torch-directml"]
+dev = ["pytest>=7.0", "pytest-cov>=4.0"]
+
+[project.scripts]
+lunimago = "lunimago.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["lunimago"]
