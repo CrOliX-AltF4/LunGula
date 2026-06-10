@@ -2,12 +2,17 @@
 
 from __future__ import annotations
 
+from collections.abc import Sized
+from typing import Any, cast
+
 import torch
 import torch.nn as nn
-from torch.utils.data import DataLoader, random_split
+from torch.utils.data import DataLoader, Dataset, random_split
 from tqdm import tqdm
 
 from .models.base_model import BaseImitatonModel
+
+_Batch = tuple[torch.Tensor, torch.Tensor]
 
 
 class Trainer:
@@ -26,19 +31,20 @@ class Trainer:
 
     def fit(
         self,
-        dataset: torch.utils.data.Dataset,
+        dataset: Dataset[_Batch],
         epochs: int = 20,
         batch_size: int = 128,
         checkpoint_dir: str | None = None,
-    ) -> list[dict]:
-        val_len = max(1, int(len(dataset) * self.val_split))
-        train_len = len(dataset) - val_len
+    ) -> list[dict[str, Any]]:
+        n_total = len(cast(Sized, dataset))
+        val_len = max(1, int(n_total * self.val_split))
+        train_len = n_total - val_len
         train_ds, val_ds = random_split(dataset, [train_len, val_len])
 
-        train_dl = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
-        val_dl = DataLoader(val_ds, batch_size=batch_size)
+        train_dl: DataLoader[_Batch] = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
+        val_dl: DataLoader[_Batch] = DataLoader(val_ds, batch_size=batch_size)
 
-        history = []
+        history: list[dict[str, Any]] = []
         for epoch in range(1, epochs + 1):
             train_loss = self._epoch(train_dl, train=True)
             val_loss = self._epoch(val_dl, train=False)
@@ -56,7 +62,7 @@ class Trainer:
 
         return history
 
-    def _epoch(self, loader: DataLoader, *, train: bool) -> float:
+    def _epoch(self, loader: DataLoader[_Batch], *, train: bool) -> float:
         self.model.train(train)
         total = 0.0
         with torch.set_grad_enabled(train):
@@ -68,5 +74,6 @@ class Trainer:
                     self.opt.zero_grad()
                     loss.backward()
                     self.opt.step()
-                total += loss.item() * len(x)
-        return total / len(loader.dataset)
+                total += float(loss.item()) * len(x)
+        assert loader.dataset is not None
+        return total / len(cast(Sized, loader.dataset))

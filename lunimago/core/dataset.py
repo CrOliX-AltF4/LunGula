@@ -9,7 +9,7 @@ from torch.utils.data import Dataset
 from .base_game import BaseReplayParser
 
 
-class ReplayDataset(Dataset):
+class ReplayDataset(Dataset[tuple[torch.Tensor, torch.Tensor]]):
     """Sliding-window dataset built from a list of replay files.
 
     Each sample is (context_window, next_action) — the model sees the last

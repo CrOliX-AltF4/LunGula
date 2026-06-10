@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from typing import Any
 
 import numpy as np
 
@@ -40,7 +41,7 @@ class BaseGameEncoder(ABC):
     """Encodes raw game data into normalized feature vectors."""
 
     @abstractmethod
-    def encode_state(self, raw: dict) -> np.ndarray: ...
+    def encode_state(self, raw: dict[str, Any]) -> np.ndarray: ...
 
     @abstractmethod
-    def encode_action(self, raw: dict) -> np.ndarray: ...
+    def encode_action(self, raw: dict[str, Any]) -> np.ndarray: ...
