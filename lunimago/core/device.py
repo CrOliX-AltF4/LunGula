@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 import torch
 
 
@@ -14,7 +16,7 @@ def resolve_device(preference: str | None = None) -> torch.device:
         if preference == "directml":
             import torch_directml
 
-            return torch_directml.device()
+            return cast(torch.device, torch_directml.device())
         return torch.device(preference)
 
     if torch.cuda.is_available():
@@ -24,7 +26,7 @@ def resolve_device(preference: str | None = None) -> torch.device:
         import torch_directml
 
         if torch_directml.is_available():
-            return torch_directml.device()
+            return cast(torch.device, torch_directml.device())
     except ImportError:
         pass
 

@@ -1,0 +1,21 @@
+core:
+  - lunimago/core/**/*
+
+games:
+  - lunimago/games/**/*
+
+tests:
+  - tests/**/*
+
+ci:
+  - .github/workflows/**/*
+  - .github/labeler.yml
+
+docs:
+  - '*.md'
+  - docs/**/*
+
+build:
+  - pyproject.toml
+  - .github/workflows/release.yml
+  - .github/workflows/auto-tag.yml

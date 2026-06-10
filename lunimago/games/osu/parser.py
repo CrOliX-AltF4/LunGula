@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import lzma
 import struct
+from typing import Any
 
 import numpy as np
 
@@ -43,9 +44,9 @@ class OsuReplayParser(BaseReplayParser):
 # ── .osu beatmap parser (hit objects only) ────────────────────────────────────
 
 
-def _parse_beatmap(path: str) -> list[dict]:
+def _parse_beatmap(path: str) -> list[dict[str, Any]]:
     """Return list of {time_ms, x, y} for HitCircles and Slider heads."""
-    objects: list[dict] = []
+    objects: list[dict[str, Any]] = []
     in_section = False
     with open(path, encoding="utf-8", errors="ignore") as f:
         for line in f:
@@ -87,7 +88,7 @@ def _read_string(data: bytes, pos: int) -> tuple[str, int]:
     return data[pos : pos + length].decode("utf-8", errors="ignore"), pos + length
 
 
-def _parse_replay(path: str) -> list[dict]:
+def _parse_replay(path: str) -> list[dict[str, Any]]:
     """Return list of {time_ms, x, y, keys} from the replay data frames."""
     with open(path, "rb") as f:
         data = f.read()
@@ -114,7 +115,7 @@ def _parse_replay(path: str) -> list[dict]:
     compressed = data[pos : pos + compressed_len]
     raw = lzma.decompress(compressed).decode("utf-8", errors="ignore")
 
-    frames: list[dict] = []
+    frames: list[dict[str, Any]] = []
     t = 0.0
     for chunk in raw.split(","):
         chunk = chunk.strip()
@@ -142,8 +143,8 @@ def _parse_replay(path: str) -> list[dict]:
 
 
 def _align(
-    hit_objects: list[dict],
-    replay_frames: list[dict],
+    hit_objects: list[dict[str, Any]],
+    replay_frames: list[dict[str, Any]],
 ) -> list[GameFrame]:
     if not hit_objects or not replay_frames:
         return []

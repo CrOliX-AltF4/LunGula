@@ -2,9 +2,13 @@ name: CI
 
 on:
   push:
-    branches: [master, dev]
+    branches: [master]
   pull_request:
     branches: [master]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   lint:
@@ -35,3 +39,10 @@ jobs:
           cache: pip
       - run: pip install -e ".[dev]"
       - run: pytest --cov=lunimago --cov-report=term-missing
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        if: matrix.python-version == '3.11'
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false

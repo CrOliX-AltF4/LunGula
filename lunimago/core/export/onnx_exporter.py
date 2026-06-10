@@ -24,7 +24,7 @@ def export_onnx(
     dummy = torch.zeros(1, window, model.feature_dim)
     torch.onnx.export(
         model,
-        dummy,
+        (dummy,),
         output_path,
         input_names=["context"],
         output_names=["action"],

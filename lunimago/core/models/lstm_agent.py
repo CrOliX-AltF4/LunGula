@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 import torch
 import torch.nn as nn
 
@@ -48,4 +50,4 @@ class LSTMAgent(BaseImitatonModel):
         # x: (batch, window, feature_dim)
         out, _ = self.lstm(x)
         last = out[:, -1, :]  # take last timestep
-        return self.head(self.norm(last))
+        return cast(torch.Tensor, self.head(self.norm(last)))
