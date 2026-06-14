@@ -35,7 +35,6 @@ class TestResolveDevice:
             assert device.type == "cuda"
 
     def test_auto_falls_back_to_cpu_in_ci(self) -> None:
-        # In CI (no GPU), auto must resolve to CPU
         device = resolve_device("auto")
-        # Should be one of the known valid types
-        assert device.type in ("cpu", "cuda", "mps")
+        # privateuseone = DirectML (AMD/Intel on Windows)
+        assert device.type in ("cpu", "cuda", "mps", "privateuseone")
