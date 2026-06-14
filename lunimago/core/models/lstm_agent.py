@@ -29,8 +29,13 @@ class _LSTMCell(nn.Module):
         c: torch.Tensor,
     ) -> tuple[torch.Tensor, torch.Tensor]:
         gates = self.gates(torch.cat([x, h], dim=-1))
-        # split with explicit sizes → ONNX Split opset 13 (chunk → num_outputs needs opset 18)
-        i, f, g, o = gates.split(self.hidden_size, dim=-1)
+        # Explicit slicing avoids ONNX Split entirely (chunk/split emit num_outputs on opset 17
+        # in newer PyTorch, which onnxruntime < opset-18 rejects)
+        n = self.hidden_size
+        i = gates[..., :n]
+        f = gates[..., n : 2 * n]
+        g = gates[..., 2 * n : 3 * n]
+        o = gates[..., 3 * n :]
         c_next = torch.sigmoid(f) * c + torch.sigmoid(i) * torch.tanh(g)
         h_next = torch.sigmoid(o) * torch.tanh(c_next)
         return h_next, c_next
