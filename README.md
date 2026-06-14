@@ -101,6 +101,7 @@ lunimago train --game osu --data ./replays \
 | `--window`  | `32`             | Context window size (frames)             |
 | `--device`  | `auto`           | Compute device                           |
 | `--export`  | none             | Export final model to `.onnx`            |
+| `--resume`  | off              | Resume from latest checkpoint in `--out` |
 
 ---
 

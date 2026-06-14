@@ -14,7 +14,11 @@ htmlcov/
 
 # Training artifacts
 *.onnx
+*.onnx.data
 checkpoints/
 runs/
 data/replays/
 data/beatmaps/
+
+# Logs
+*.log
