@@ -35,7 +35,21 @@ class Trainer:
         epochs: int = 20,
         batch_size: int = 128,
         checkpoint_dir: str | None = None,
+        resume: bool = False,
     ) -> list[dict[str, Any]]:
+        import os
+        import glob
+
+        start_epoch = 1
+        if resume and checkpoint_dir and os.path.isdir(checkpoint_dir):
+            saved = sorted(glob.glob(f"{checkpoint_dir}/epoch_*.pt"))
+            if saved:
+                latest = saved[-1]
+                self.model.load_state_dict(torch.load(latest, map_location=self.device))
+                # epoch_007.pt → start from epoch 8
+                start_epoch = int(os.path.basename(latest).split("_")[1].split(".")[0]) + 1
+                print(f"Resumed from {latest} — starting at epoch {start_epoch}")
+
         n_total = len(cast(Sized, dataset))
         val_len = max(1, int(n_total * self.val_split))
         train_len = n_total - val_len
@@ -45,15 +59,13 @@ class Trainer:
         val_dl: DataLoader[_Batch] = DataLoader(val_ds, batch_size=batch_size)
 
         history: list[dict[str, Any]] = []
-        for epoch in range(1, epochs + 1):
+        for epoch in range(start_epoch, epochs + 1):
             train_loss = self._epoch(train_dl, train=True)
             val_loss = self._epoch(val_dl, train=False)
             history.append({"epoch": epoch, "train": train_loss, "val": val_loss})
             print(f"[{epoch:03d}/{epochs}] train={train_loss:.5f}  val={val_loss:.5f}")
 
             if checkpoint_dir:
-                import os
-
                 os.makedirs(checkpoint_dir, exist_ok=True)
                 torch.save(
                     self.model.state_dict(),
