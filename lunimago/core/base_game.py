@@ -6,15 +6,15 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any
 
-import numpy as np
+import numpy.typing as npt
 
 
 @dataclass
 class GameFrame:
     """One timestep of game state + the human action taken at that timestep."""
 
-    features: np.ndarray  # encoded game state vector
-    action: np.ndarray  # encoded action vector (cursor + clicks, etc.)
+    features: npt.NDArray[Any]  # encoded game state vector
+    action: npt.NDArray[Any]  # encoded action vector (cursor + clicks, etc.)
     timestamp_ms: float
 
 
@@ -41,7 +41,7 @@ class BaseGameEncoder(ABC):
     """Encodes raw game data into normalized feature vectors."""
 
     @abstractmethod
-    def encode_state(self, raw: dict[str, Any]) -> np.ndarray: ...
+    def encode_state(self, raw: dict[str, Any]) -> npt.NDArray[Any]: ...
 
     @abstractmethod
-    def encode_action(self, raw: dict[str, Any]) -> np.ndarray: ...
+    def encode_action(self, raw: dict[str, Any]) -> npt.NDArray[Any]: ...

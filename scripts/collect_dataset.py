@@ -273,19 +273,19 @@ def main() -> None:
         print()
 
     print("=" * 50)
-    print(f"Done.")
+    print("Done.")
     print(f"  New pairs:     {total_ok}")
     print(f"  Already done:  {total_already}")
     print(f"  Skipped:       {total_skip}")
     print(f"  Total in dir:  {len(done)}")
     print()
     if len(done) >= 50:
-        print(f"Next step:")
+        print("Next step:")
         print(f"  py -3.11 -m lunimago train --game osu --data {out_root} \\")
-        print(f"    --epochs 30 --batch 256 --window 32 --export model.onnx")
+        print("    --epochs 30 --batch 256 --window 32 --export model.onnx")
     else:
-        print(f"Tip: aim for 1000+ pairs before training for production quality.")
-        print(f"     Increase --beatmaps or --replays and re-run (resumes automatically).")
+        print("Tip: aim for 1000+ pairs before training for production quality.")
+        print("     Increase --beatmaps or --replays and re-run (resumes automatically).")
 
 
 if __name__ == "__main__":

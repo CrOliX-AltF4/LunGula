@@ -22,6 +22,7 @@ Optional:
 from __future__ import annotations
 
 import argparse
+import contextlib
 import json
 import os
 import pathlib
@@ -137,7 +138,7 @@ def main() -> None:
             continue
         print(f"  {len(scores)} score(s) available")
 
-        print(f"  Downloading beatmap .osu...", end=" ", flush=True)
+        print("  Downloading beatmap .osu...", end=" ", flush=True)
         try:
             osu_bytes = fetch_osu_file(beatmap_id)
             print("OK")
@@ -156,10 +157,8 @@ def main() -> None:
             if not score.get("replay", False):
                 print("SKIP (no replay stored)")
                 total_skip += 1
-                try:
+                with contextlib.suppress(OSError):
                     pair_dir.rmdir()
-                except OSError:
-                    pass
                 continue
             try:
                 osr_bytes = fetch_replay(token, score_id)
@@ -170,10 +169,8 @@ def main() -> None:
             except urllib.error.HTTPError as e:
                 print(f"FAIL ({e})")
                 total_skip += 1
-                try:
+                with contextlib.suppress(OSError):
                     pair_dir.rmdir()
-                except OSError:
-                    pass
 
             time.sleep(rate_delay)
 
@@ -183,7 +180,7 @@ def main() -> None:
     print(f"Data root: {out_root.resolve()}")
 
     if total_ok > 0:
-        print(f"\nNext step:")
+        print("\nNext step:")
         print(f"  py -3.11 -m lunimago train --game osu --data {out_root} --export model.onnx")
 
 

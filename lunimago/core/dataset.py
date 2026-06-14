@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
+import numpy.typing as npt
 import torch
 from torch.utils.data import Dataset
 
@@ -23,7 +26,7 @@ class ReplayDataset(Dataset[tuple[torch.Tensor, torch.Tensor]]):
         window: int = 32,
     ) -> None:
         self.window = window
-        self._samples: list[tuple[np.ndarray, np.ndarray]] = []
+        self._samples: list[tuple[npt.NDArray[Any], npt.NDArray[Any]]] = []
 
         for replay_path, beatmap_path in replay_paths:
             frames = parser.parse(replay_path, beatmap_path)

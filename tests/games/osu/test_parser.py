@@ -228,7 +228,8 @@ class TestParseReplay:
     def test_parses_correct_frame_count(self) -> None:
         raw = "100|256|192|1,200|300|200|0,-12345|0|0|0"
         with tempfile.NamedTemporaryFile(suffix=".osr", delete=False) as f:
-            f.write(_build_osr(raw)); path = f.name
+            f.write(_build_osr(raw))
+            path = f.name
         try:
             assert len(_parse_replay(path)) == 2
         finally:
@@ -237,7 +238,8 @@ class TestParseReplay:
     def test_timestamps_accumulate(self) -> None:
         raw = "100|256|192|0,200|300|200|0"
         with tempfile.NamedTemporaryFile(suffix=".osr", delete=False) as f:
-            f.write(_build_osr(raw)); path = f.name
+            f.write(_build_osr(raw))
+            path = f.name
         try:
             frames = _parse_replay(path)
             assert frames[0]["time_ms"] == pytest.approx(100.0)
@@ -248,7 +250,8 @@ class TestParseReplay:
     def test_cursor_position_parsed(self) -> None:
         raw = "100|256|192|0"
         with tempfile.NamedTemporaryFile(suffix=".osr", delete=False) as f:
-            f.write(_build_osr(raw)); path = f.name
+            f.write(_build_osr(raw))
+            path = f.name
         try:
             frames = _parse_replay(path)
             assert frames[0]["x"] == pytest.approx(256.0)
@@ -259,7 +262,8 @@ class TestParseReplay:
     def test_keys_bitmask_parsed(self) -> None:
         raw = "100|256|192|3"
         with tempfile.NamedTemporaryFile(suffix=".osr", delete=False) as f:
-            f.write(_build_osr(raw)); path = f.name
+            f.write(_build_osr(raw))
+            path = f.name
         try:
             frames = _parse_replay(path)
             assert frames[0]["keys"] == 3
@@ -269,7 +273,8 @@ class TestParseReplay:
     def test_sentinel_frame_skipped(self) -> None:
         raw = "-12345|0|0|0"
         with tempfile.NamedTemporaryFile(suffix=".osr", delete=False) as f:
-            f.write(_build_osr(raw)); path = f.name
+            f.write(_build_osr(raw))
+            path = f.name
         try:
             assert _parse_replay(path) == []
         finally:
@@ -280,7 +285,8 @@ class TestParseReplay:
         # causing a 2-byte offset that landed compressed_len on garbage bytes (reads 0).
         raw = "500|256|192|1"
         with tempfile.NamedTemporaryFile(suffix=".osr", delete=False) as f:
-            f.write(_build_osr(raw)); path = f.name
+            f.write(_build_osr(raw))
+            path = f.name
         try:
             frames = _parse_replay(path)
             assert len(frames) == 1, "offset bug: wrong count-field short count"

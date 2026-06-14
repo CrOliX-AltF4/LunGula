@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import glob
+import os
 from collections.abc import Sized
 from typing import Any, cast
 
 import torch
 import torch.nn as nn
+from torch.optim.adamw import AdamW
 from torch.utils.data import DataLoader, Dataset, random_split
 from tqdm import tqdm
 
@@ -25,7 +28,7 @@ class Trainer:
     ) -> None:
         self.model = model.to(device)
         self.device = device
-        self.opt = torch.optim.AdamW(model.parameters(), lr=lr)
+        self.opt = AdamW(model.parameters(), lr=lr)
         self.loss_fn = nn.MSELoss()
         self.val_split = val_split
 
@@ -37,9 +40,6 @@ class Trainer:
         checkpoint_dir: str | None = None,
         resume: bool = False,
     ) -> list[dict[str, Any]]:
-        import os
-        import glob
-
         start_epoch = 1
         if resume and checkpoint_dir and os.path.isdir(checkpoint_dir):
             saved = sorted(glob.glob(f"{checkpoint_dir}/epoch_*.pt"))
