@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import lzma
 import os
+import struct
 import tempfile
 from collections.abc import Generator
 
@@ -15,6 +17,7 @@ from lunimago.games.osu.parser import (
     _align,
     _bisect_left,
     _parse_beatmap,
+    _parse_replay,
 )
 
 # ── _bisect_left ──────────────────────────────────────────────────────────────
@@ -178,3 +181,108 @@ class TestOsuReplayParser:
 
     def test_action_dim(self) -> None:
         assert OsuReplayParser().action_dim == _ACTION_DIM
+
+
+# ── _parse_replay ──────────────────────────────────────────────────────────────
+
+
+def _build_osr(replay_raw: str) -> bytes:
+    """Build a minimal valid .osr binary from a raw replay data string."""
+
+    def _write_str(s: str) -> bytes:
+        enc = s.encode("utf-8")
+        length = len(enc)
+        leb: list[int] = []
+        while True:
+            byte = length & 0x7F
+            length >>= 7
+            if length:
+                byte |= 0x80
+            leb.append(byte)
+            if not length:
+                break
+        return bytes([0x0B] + leb) + enc
+
+    compressed = lzma.compress(replay_raw.encode("utf-8"))
+
+    buf = bytearray()
+    buf += bytes([0])                                       # game mode (standard)
+    buf += struct.pack("<I", 20151228)                      # version
+    buf += _write_str("a" * 32)                            # beatmap MD5
+    buf += _write_str("TestPlayer")                        # player name
+    buf += _write_str("b" * 32)                            # replay MD5
+    buf += struct.pack("<HHHHHH", 100, 5, 0, 0, 0, 2)     # 6 count fields
+    buf += struct.pack("<I", 999_999)                      # total score
+    buf += struct.pack("<H", 100)                          # max combo
+    buf += bytes([1])                                       # perfect
+    buf += struct.pack("<I", 0)                            # mods
+    buf += bytes([0x0B, 0x00])                             # life bar (present, empty)
+    buf += struct.pack("<q", 634_338_276_850_000_000)      # timestamp
+    buf += struct.pack("<i", len(compressed))              # compressed data length
+    buf += compressed                                       # LZMA replay data
+    buf += struct.pack("<q", 12345)                        # trailing score ID
+    return bytes(buf)
+
+
+class TestParseReplay:
+    def test_parses_correct_frame_count(self) -> None:
+        raw = "100|256|192|1,200|300|200|0,-12345|0|0|0"
+        with tempfile.NamedTemporaryFile(suffix=".osr", delete=False) as f:
+            f.write(_build_osr(raw)); path = f.name
+        try:
+            assert len(_parse_replay(path)) == 2
+        finally:
+            os.unlink(path)
+
+    def test_timestamps_accumulate(self) -> None:
+        raw = "100|256|192|0,200|300|200|0"
+        with tempfile.NamedTemporaryFile(suffix=".osr", delete=False) as f:
+            f.write(_build_osr(raw)); path = f.name
+        try:
+            frames = _parse_replay(path)
+            assert frames[0]["time_ms"] == pytest.approx(100.0)
+            assert frames[1]["time_ms"] == pytest.approx(300.0)
+        finally:
+            os.unlink(path)
+
+    def test_cursor_position_parsed(self) -> None:
+        raw = "100|256|192|0"
+        with tempfile.NamedTemporaryFile(suffix=".osr", delete=False) as f:
+            f.write(_build_osr(raw)); path = f.name
+        try:
+            frames = _parse_replay(path)
+            assert frames[0]["x"] == pytest.approx(256.0)
+            assert frames[0]["y"] == pytest.approx(192.0)
+        finally:
+            os.unlink(path)
+
+    def test_keys_bitmask_parsed(self) -> None:
+        raw = "100|256|192|3"
+        with tempfile.NamedTemporaryFile(suffix=".osr", delete=False) as f:
+            f.write(_build_osr(raw)); path = f.name
+        try:
+            frames = _parse_replay(path)
+            assert frames[0]["keys"] == 3
+        finally:
+            os.unlink(path)
+
+    def test_sentinel_frame_skipped(self) -> None:
+        raw = "-12345|0|0|0"
+        with tempfile.NamedTemporaryFile(suffix=".osr", delete=False) as f:
+            f.write(_build_osr(raw)); path = f.name
+        try:
+            assert _parse_replay(path) == []
+        finally:
+            os.unlink(path)
+
+    def test_six_count_fields_not_seven(self) -> None:
+        # Regression: parser had pos += 2*7 instead of pos += 2*6 for count fields,
+        # causing a 2-byte offset that landed compressed_len on garbage bytes (reads 0).
+        raw = "500|256|192|1"
+        with tempfile.NamedTemporaryFile(suffix=".osr", delete=False) as f:
+            f.write(_build_osr(raw)); path = f.name
+        try:
+            frames = _parse_replay(path)
+            assert len(frames) == 1, "offset bug: wrong count-field short count"
+        finally:
+            os.unlink(path)

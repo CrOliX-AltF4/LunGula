@@ -99,7 +99,7 @@ def _parse_replay(path: str) -> list[dict[str, Any]]:
     _, pos = _read_string(data, pos)  # beatmap hash
     _, pos = _read_string(data, pos)  # player name
     _, pos = _read_string(data, pos)  # replay hash
-    pos += 2 + 2 + 2 + 2 + 2 + 2 + 2  # counts
+    pos += 2 + 2 + 2 + 2 + 2 + 2  # counts: n300, n100, n50, ngeki, nkatu, nmiss
     pos += 4  # total score
     pos += 2  # max combo
     pos += 1  # perfect
