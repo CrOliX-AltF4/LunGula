@@ -46,7 +46,7 @@ def get_token(client_id: str, client_secret: str) -> str:
             "client_secret": client_secret,
             "grant_type": "client_credentials",
             "scope": "public",
-        }
+        },
     ).encode()
     req = urllib.request.Request(_TOKEN_URL, data=body, method="POST")
     req.add_header("Content-Type", "application/x-www-form-urlencoded")
