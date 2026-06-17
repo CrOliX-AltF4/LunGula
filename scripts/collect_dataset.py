@@ -32,14 +32,12 @@ _API = f"{_BASE}/api/v2"
 # ── Auth ───────────────────────────────────────────────────────────────────────
 
 def get_token(client_id: str, client_secret: str) -> str:
-    body = urllib.parse.urlencode(
-        {
-            "client_id": client_id,
-            "client_secret": client_secret,
-            "grant_type": "client_credentials",
-            "scope": "public",
-        },
-    ).encode()
+    body = urllib.parse.urlencode({
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "grant_type": "client_credentials",
+        "scope": "public",
+    }).encode()
     req = urllib.request.Request(_TOKEN_URL, data=body, method="POST")
     req.add_header("Content-Type", "application/x-www-form-urlencoded")
     req.add_header("Accept", "application/json")
