@@ -1,33 +1,21 @@
 core:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "lunimago/core/**/*"
+  - 'lunimago/core/**'
 
 games:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "lunimago/games/**/*"
+  - 'lunimago/games/**'
 
 tests:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "tests/**/*"
+  - 'tests/**'
 
 ci:
-  - changed-files:
-      - any-glob-to-any-file:
-          - ".github/workflows/**/*"
-          - ".github/labeler.yml"
+  - '.github/workflows/**'
+  - '.github/labeler.yml'
 
 docs:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "*.md"
-          - "docs/**/*"
+  - '*.md'
+  - 'docs/**'
 
 build:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "pyproject.toml"
-          - ".github/workflows/release.yml"
-          - ".github/workflows/auto-tag.yml"
+  - 'pyproject.toml'
+  - '.github/workflows/release.yml'
+  - '.github/workflows/auto-tag.yml'
