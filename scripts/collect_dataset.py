@@ -31,13 +31,16 @@ _API = f"{_BASE}/api/v2"
 
 # ── Auth ───────────────────────────────────────────────────────────────────────
 
+
 def get_token(client_id: str, client_secret: str) -> str:
-    body = urllib.parse.urlencode({
-        "client_id": client_id,
-        "client_secret": client_secret,
-        "grant_type": "client_credentials",
-        "scope": "public",
-    }).encode()
+    body = urllib.parse.urlencode(
+        {
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "grant_type": "client_credentials",
+            "scope": "public",
+        }
+    ).encode()
     req = urllib.request.Request(_TOKEN_URL, data=body, method="POST")
     req.add_header("Content-Type", "application/x-www-form-urlencoded")
     req.add_header("Accept", "application/json")
@@ -46,6 +49,7 @@ def get_token(client_id: str, client_secret: str) -> str:
 
 
 # ── API helpers ────────────────────────────────────────────────────────────────
+
 
 def _get(token: str, path: str, params: dict | None = None) -> dict | list:
     url = f"{_API}{path}"
@@ -86,6 +90,7 @@ def _get_bytes(url: str, token: str, retries: int = 4) -> bytes:
 
 
 # ── Beatmap search ─────────────────────────────────────────────────────────────
+
 
 def search_beatmaps(
     token: str,
@@ -146,6 +151,7 @@ def search_beatmaps(
 
 # ── Replay fetch ───────────────────────────────────────────────────────────────
 
+
 def fetch_scores(token: str, beatmap_id: int, limit: int) -> list[dict]:
     data = _get(token, f"/beatmaps/{beatmap_id}/scores", {"limit": limit, "mode": "osu"})
     return data.get("scores", [])  # type: ignore[union-attr]
@@ -161,6 +167,7 @@ def fetch_replay(token: str, score_id: int) -> bytes:
 
 # ── Progress tracking ──────────────────────────────────────────────────────────
 
+
 def load_progress(out_root: pathlib.Path) -> set[str]:
     path = out_root / ".progress.json"
     if path.exists():
@@ -174,6 +181,7 @@ def save_progress(out_root: pathlib.Path, done: set[str]) -> None:
 
 
 # ── Main ───────────────────────────────────────────────────────────────────────
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(
@@ -233,7 +241,7 @@ def main() -> None:
     total_already = len(done)
 
     for bm_idx, beatmap_id in enumerate(beatmap_ids):
-        print(f"[{bm_idx+1:04d}/{len(beatmap_ids):04d}] beatmap {beatmap_id}")
+        print(f"[{bm_idx + 1:04d}/{len(beatmap_ids):04d}] beatmap {beatmap_id}")
 
         # Fetch scores
         try:
@@ -268,7 +276,7 @@ def main() -> None:
                 total_skip += 1
                 continue
 
-            print(f"  [{idx+1:02d}/{len(scores):02d}] score {score_id}...", end=" ", flush=True)
+            print(f"  [{idx + 1:02d}/{len(scores):02d}] score {score_id}...", end=" ", flush=True)
             time.sleep(rate_delay)  # throttle before every download
             try:
                 osr_bytes = fetch_replay(token, score_id)

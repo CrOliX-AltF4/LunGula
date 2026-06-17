@@ -1,14 +1,17 @@
 core:
   - changed-files:
-      - any-glob-to-any-file: "lunimago/core/**/*"
+      - any-glob-to-any-file:
+          - "lunimago/core/**/*"
 
 games:
   - changed-files:
-      - any-glob-to-any-file: "lunimago/games/**/*"
+      - any-glob-to-any-file:
+          - "lunimago/games/**/*"
 
 tests:
   - changed-files:
-      - any-glob-to-any-file: "tests/**/*"
+      - any-glob-to-any-file:
+          - "tests/**/*"
 
 ci:
   - changed-files:
