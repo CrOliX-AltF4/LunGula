@@ -1,21 +1,29 @@
+# Auto-label PRs based on changed files
+
 core:
-  - lunimago/core/**/*
+  - changed-files:
+      - any-glob-to-any-file: 'lunimago/core/**'
 
 games:
-  - lunimago/games/**/*
+  - changed-files:
+      - any-glob-to-any-file: 'lunimago/games/**'
 
 tests:
-  - tests/**/*
+  - changed-files:
+      - any-glob-to-any-file: 'tests/**'
 
 ci:
-  - .github/workflows/**/*
-  - .github/labeler.yml
+  - changed-files:
+      - any-glob-to-any-file: '.github/workflows/**'
+      - any-glob-to-any-file: '.github/labeler.yml'
 
 docs:
-  - '*.md'
-  - docs/**/*
+  - changed-files:
+      - any-glob-to-any-file: '*.md'
+      - any-glob-to-any-file: 'docs/**'
 
 build:
-  - pyproject.toml
-  - .github/workflows/release.yml
-  - .github/workflows/auto-tag.yml
+  - changed-files:
+      - any-glob-to-any-file: 'pyproject.toml'
+      - any-glob-to-any-file: '.github/workflows/release.yml'
+      - any-glob-to-any-file: '.github/workflows/auto-tag.yml'

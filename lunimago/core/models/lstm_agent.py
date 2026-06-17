@@ -87,10 +87,14 @@ class LSTMAgent(BaseImitatonModel):
         batch_size, seq_len, _ = x.shape
         device, dtype = x.device, x.dtype
 
-        h = [torch.zeros(batch_size, self._hidden_size, device=device, dtype=dtype)
-             for _ in range(self._num_layers)]
-        c = [torch.zeros(batch_size, self._hidden_size, device=device, dtype=dtype)
-             for _ in range(self._num_layers)]
+        h = [
+            torch.zeros(batch_size, self._hidden_size, device=device, dtype=dtype)
+            for _ in range(self._num_layers)
+        ]
+        c = [
+            torch.zeros(batch_size, self._hidden_size, device=device, dtype=dtype)
+            for _ in range(self._num_layers)
+        ]
 
         for t in range(seq_len):
             inp = x[:, t, :]

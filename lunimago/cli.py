@@ -26,7 +26,11 @@ def main() -> None:
     train.add_argument("--window", type=int, default=32, help="Context window size (frames)")
     train.add_argument("--device", default="auto", help="auto | cuda | directml | mps | cpu")
     train.add_argument("--export", default=None, help="Export final model to this .onnx path")
-    train.add_argument("--resume", action="store_true", help="Resume from latest checkpoint in --out")
+    train.add_argument(
+        "--resume",
+        action="store_true",
+        help="Resume from latest checkpoint in --out",
+    )
 
     args = parser.parse_args()
 
@@ -62,7 +66,13 @@ def _cmd_train(args: argparse.Namespace) -> None:
     print(f"Samples: {len(dataset)}")
 
     trainer = Trainer(model, device)
-    trainer.fit(dataset, epochs=args.epochs, batch_size=args.batch, checkpoint_dir=args.out, resume=args.resume)
+    trainer.fit(
+        dataset,
+        epochs=args.epochs,
+        batch_size=args.batch,
+        checkpoint_dir=args.out,
+        resume=args.resume,
+    )
 
     if args.export:
         export_onnx(model, args.export, window=args.window)

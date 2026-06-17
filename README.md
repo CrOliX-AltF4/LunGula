@@ -12,6 +12,9 @@ _A game imitation learning framework. Feed it human replays — a trained ONNX m
 
 </div>
 
+> [!NOTE]
+> Fully standalone — any runtime that can load ONNX models can consume the output (Python, Node.js, C++). Part of the [Lun' ecosystem](https://github.com/CrOliX-AltF4).
+
 ---
 
 ## What it does
@@ -178,6 +181,18 @@ lunimago/
         ├── parser.py       # .osr + .osu decoder → GameFrame[]
         └── plugin.py       # CLI entry point
 ```
+
+---
+
+## Lun ecosystem
+
+| Project | Role |
+|---|---|
+| [LunAtar](https://github.com/CrOliX-AltF4/LunAtar) | AI dev pipeline — intent → code |
+| [LunAcedia](https://github.com/CrOliX-AltF4/LunAcedia) | Information infrastructure — events · actions · AI butler |
+| [LunAvaritia](https://github.com/CrOliX-AltF4/LunAvaritia) | Mobile companion — Android |
+| **LunImago** | Imitation learning — gameplay → ONNX policy |
+| LunAnima | AI companion core — private |
 
 ---
 
