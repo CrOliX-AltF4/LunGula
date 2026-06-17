@@ -206,21 +206,21 @@ def _build_osr(replay_raw: str) -> bytes:
     compressed = lzma.compress(replay_raw.encode("utf-8"))
 
     buf = bytearray()
-    buf += bytes([0])                                       # game mode (standard)
-    buf += struct.pack("<I", 20151228)                      # version
-    buf += _write_str("a" * 32)                            # beatmap MD5
-    buf += _write_str("TestPlayer")                        # player name
-    buf += _write_str("b" * 32)                            # replay MD5
-    buf += struct.pack("<HHHHHH", 100, 5, 0, 0, 0, 2)     # 6 count fields
-    buf += struct.pack("<I", 999_999)                      # total score
-    buf += struct.pack("<H", 100)                          # max combo
-    buf += bytes([1])                                       # perfect
-    buf += struct.pack("<I", 0)                            # mods
-    buf += bytes([0x0B, 0x00])                             # life bar (present, empty)
-    buf += struct.pack("<q", 634_338_276_850_000_000)      # timestamp
-    buf += struct.pack("<i", len(compressed))              # compressed data length
-    buf += compressed                                       # LZMA replay data
-    buf += struct.pack("<q", 12345)                        # trailing score ID
+    buf += bytes([0])  # game mode (standard)
+    buf += struct.pack("<I", 20151228)  # version
+    buf += _write_str("a" * 32)  # beatmap MD5
+    buf += _write_str("TestPlayer")  # player name
+    buf += _write_str("b" * 32)  # replay MD5
+    buf += struct.pack("<HHHHHH", 100, 5, 0, 0, 0, 2)  # 6 count fields
+    buf += struct.pack("<I", 999_999)  # total score
+    buf += struct.pack("<H", 100)  # max combo
+    buf += bytes([1])  # perfect
+    buf += struct.pack("<I", 0)  # mods
+    buf += bytes([0x0B, 0x00])  # life bar (present, empty)
+    buf += struct.pack("<q", 634_338_276_850_000_000)  # timestamp
+    buf += struct.pack("<i", len(compressed))  # compressed data length
+    buf += compressed  # LZMA replay data
+    buf += struct.pack("<q", 12345)  # trailing score ID
     return bytes(buf)
 
 

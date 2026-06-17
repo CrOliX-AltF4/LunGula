@@ -62,7 +62,13 @@ def _cmd_train(args: argparse.Namespace) -> None:
     print(f"Samples: {len(dataset)}")
 
     trainer = Trainer(model, device)
-    trainer.fit(dataset, epochs=args.epochs, batch_size=args.batch, checkpoint_dir=args.out, resume=args.resume)
+    trainer.fit(
+        dataset,
+        epochs=args.epochs,
+        batch_size=args.batch,
+        checkpoint_dir=args.out,
+        resume=args.resume,
+    )
 
     if args.export:
         export_onnx(model, args.export, window=args.window)

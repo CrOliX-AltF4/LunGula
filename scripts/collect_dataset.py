@@ -32,12 +32,14 @@ _API = f"{_BASE}/api/v2"
 # ── Auth ───────────────────────────────────────────────────────────────────────
 
 def get_token(client_id: str, client_secret: str) -> str:
-    body = urllib.parse.urlencode({
-        "client_id":     client_id,
-        "client_secret": client_secret,
-        "grant_type":    "client_credentials",
-        "scope":         "public",
-    }).encode()
+    body = urllib.parse.urlencode(
+        {
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "grant_type": "client_credentials",
+            "scope": "public",
+        }
+    ).encode()
     req = urllib.request.Request(_TOKEN_URL, data=body, method="POST")
     req.add_header("Content-Type", "application/x-www-form-urlencoded")
     req.add_header("Accept", "application/json")
@@ -179,17 +181,32 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Collect osu! replay dataset for LunImago training"
     )
-    parser.add_argument("--beatmaps",      type=int,   default=100,  help="Number of beatmaps to target")
-    parser.add_argument("--replays",       type=int,   default=10,   help="Max replays per beatmap")
-    parser.add_argument("--stars-min",     type=float, default=2.0,  help="Min star rating (default 2.0)")
-    parser.add_argument("--stars-max",     type=float, default=6.0,  help="Max star rating (default 6.0)")
-    parser.add_argument("--out",           default="data/replays",   help="Output directory")
-    parser.add_argument("--beatmap-ids",   nargs="*",  type=int,     help="Use specific beatmap IDs instead of search")
+    parser.add_argument("--beatmaps", type=int, default=100, help="Number of beatmaps to target")
+    parser.add_argument("--replays", type=int, default=10, help="Max replays per beatmap")
+    parser.add_argument(
+        "--stars-min",
+        type=float,
+        default=2.0,
+        help="Min star rating (default 2.0)",
+    )
+    parser.add_argument(
+        "--stars-max",
+        type=float,
+        default=6.0,
+        help="Max star rating (default 6.0)",
+    )
+    parser.add_argument("--out", default="data/replays", help="Output directory")
+    parser.add_argument(
+        "--beatmap-ids",
+        nargs="*",
+        type=int,
+        help="Use specific beatmap IDs instead of search",
+    )
     args = parser.parse_args()
 
-    client_id     = os.environ.get("OSU_CLIENT_ID", "")
+    client_id = os.environ.get("OSU_CLIENT_ID", "")
     client_secret = os.environ.get("OSU_CLIENT_SECRET", "")
-    rate_delay    = float(os.environ.get("OSU_RATE_DELAY", "0.3"))
+    rate_delay = float(os.environ.get("OSU_RATE_DELAY", "0.3"))
 
     if not client_id or not client_secret:
         print("ERROR: OSU_CLIENT_ID and OSU_CLIENT_SECRET must be set.", file=sys.stderr)
@@ -241,9 +258,9 @@ def main() -> None:
             continue
 
         for idx, score in enumerate(scores):
-            score_id   = score["id"]
-            pair_key   = f"{beatmap_id}_{score_id}"
-            pair_dir   = out_root / f"{beatmap_id}_{idx:02d}"
+            score_id = score["id"]
+            pair_key = f"{beatmap_id}_{score_id}"
+            pair_dir = out_root / f"{beatmap_id}_{idx:02d}"
 
             if pair_key in done:
                 total_already += 1

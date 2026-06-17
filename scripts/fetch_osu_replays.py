@@ -40,12 +40,14 @@ _API = f"{_BASE}/api/v2"
 # ── Auth ───────────────────────────────────────────────────────────────────────
 
 def get_token(client_id: str, client_secret: str) -> str:
-    body = urllib.parse.urlencode({
-        "client_id":     client_id,
-        "client_secret": client_secret,
-        "grant_type":    "client_credentials",
-        "scope":         "public",
-    }).encode()
+    body = urllib.parse.urlencode(
+        {
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "grant_type": "client_credentials",
+            "scope": "public",
+        }
+    ).encode()
     req = urllib.request.Request(_TOKEN_URL, data=body, method="POST")
     req.add_header("Content-Type", "application/x-www-form-urlencoded")
     req.add_header("Accept", "application/json")
@@ -95,17 +97,29 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Download osu! replay+beatmap pairs for LunImago training"
     )
-    parser.add_argument("--beatmap-ids", nargs="+", type=int, required=True,
-                        help="osu! beatmap IDs (not beatmapset IDs)")
-    parser.add_argument("--out", default="data/replays",
-                        help="Output root directory (default: data/replays)")
-    parser.add_argument("--limit", type=int, default=10,
-                        help="Max replays per beatmap (default: 10)")
+    parser.add_argument(
+        "--beatmap-ids",
+        nargs="+",
+        type=int,
+        required=True,
+        help="osu! beatmap IDs (not beatmapset IDs)",
+    )
+    parser.add_argument(
+        "--out",
+        default="data/replays",
+        help="Output root directory (default: data/replays)",
+    )
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=10,
+        help="Max replays per beatmap (default: 10)",
+    )
     args = parser.parse_args()
 
-    client_id     = os.environ.get("OSU_CLIENT_ID", "")
+    client_id = os.environ.get("OSU_CLIENT_ID", "")
     client_secret = os.environ.get("OSU_CLIENT_SECRET", "")
-    rate_delay    = float(os.environ.get("OSU_RATE_DELAY", "0.3"))
+    rate_delay = float(os.environ.get("OSU_RATE_DELAY", "0.3"))
 
     if not client_id or not client_secret:
         print("ERROR: OSU_CLIENT_ID and OSU_CLIENT_SECRET must be set.", file=sys.stderr)
@@ -120,8 +134,8 @@ def main() -> None:
         sys.exit(1)
     print("[OK] Token obtained\n")
 
-    out_root   = pathlib.Path(args.out)
-    total_ok   = 0
+    out_root = pathlib.Path(args.out)
+    total_ok = 0
     total_skip = 0
 
     for beatmap_id in args.beatmap_ids:
