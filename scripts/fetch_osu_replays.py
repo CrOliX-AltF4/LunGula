@@ -1,6 +1,6 @@
 """
 Fetch osu! replays + beatmaps from the osu! API v2 and organise them
-into the data layout expected by LunImago:
+into the data layout expected by LunGula:
 
   data/replays/
     <beatmap_id>_<score_idx>/
@@ -98,7 +98,7 @@ def fetch_replay(token: str, score_id: int, mode: str = "osu") -> bytes:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Download osu! replay+beatmap pairs for LunImago training"
+        description="Download osu! replay+beatmap pairs for LunGula training"
     )
     parser.add_argument(
         "--beatmap-ids",
@@ -198,7 +198,7 @@ def main() -> None:
 
     if total_ok > 0:
         print("\nNext step:")
-        print(f"  py -3.11 -m lunimago train --game osu --data {out_root} --export model.onnx")
+        print(f"  py -3.11 -m lungula train --game osu --data {out_root} --export model.onnx")
 
 
 if __name__ == "__main__":

@@ -2,11 +2,11 @@
 
 core:
   - changed-files:
-      - any-glob-to-any-file: 'lunimago/core/**'
+      - any-glob-to-any-file: 'lungula/core/**'
 
 games:
   - changed-files:
-      - any-glob-to-any-file: 'lunimago/games/**'
+      - any-glob-to-any-file: 'lungula/games/**'
 
 tests:
   - changed-files:

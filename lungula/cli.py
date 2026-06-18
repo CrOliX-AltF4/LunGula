@@ -1,4 +1,4 @@
-"""lun'imago CLI — train --game osu --data ./replays"""
+"""lun'gula CLI — train --game osu --data ./replays"""
 
 from __future__ import annotations
 
@@ -6,14 +6,14 @@ import argparse
 import sys
 
 GAMES: dict[str, str] = {
-    "osu": "lunimago.games.osu.plugin",
+    "osu": "lungula.games.osu.plugin",
 }
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        prog="lunimago",
-        description="lun'imago — game imitation learning framework",
+        prog="lungula",
+        description="lun'gula — game imitation learning framework",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -41,10 +41,10 @@ def main() -> None:
 def _cmd_train(args: argparse.Namespace) -> None:
     import importlib
 
-    from lunimago.core.dataset import ReplayDataset
-    from lunimago.core.device import resolve_device
-    from lunimago.core.export.onnx_exporter import export_onnx
-    from lunimago.core.trainer import Trainer
+    from lungula.core.dataset import ReplayDataset
+    from lungula.core.device import resolve_device
+    from lungula.core.export.onnx_exporter import export_onnx
+    from lungula.core.trainer import Trainer
 
     plugin = importlib.import_module(GAMES[args.game])
     parser = plugin.make_parser()

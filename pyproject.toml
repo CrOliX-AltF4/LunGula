@@ -3,8 +3,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "lunimago"
-version = "0.2.0"
+name = "lungula"
+version = "0.3.0"
 description = "Game imitation learning framework — behavior cloning from replays to ONNX"
 requires-python = ">=3.10"
 dependencies = [
@@ -27,14 +27,15 @@ dev = [
 ]
 
 [project.scripts]
-lunimago = "lunimago.cli:main"
+lungula = "lungula.cli:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["lunimago"]
+packages = ["lungula"]
 
 [tool.ruff]
 line-length = 100
 target-version = "py310"
+exclude = ["scripts/"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]

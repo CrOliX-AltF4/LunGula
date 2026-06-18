@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from lunimago.core.base_game import BaseGameEncoder, BaseReplayParser, GameFrame
+from lungula.core.base_game import BaseGameEncoder, BaseReplayParser, GameFrame
 
 
 class _ConcreteParser(BaseReplayParser):
