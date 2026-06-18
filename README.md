@@ -1,9 +1,9 @@
 <div align="center">
 
-# ◆ Lun'Imago
+# ◆ Lun'Gula
 
 [![License](https://img.shields.io/badge/license-MIT-333333?style=flat-square)](LICENSE)
-[![CI](https://img.shields.io/github/actions/workflow/status/CrOliX-AltF4/LunImago/ci.yml?style=flat-square&label=CI)](https://github.com/CrOliX-AltF4/LunImago/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/CrOliX-AltF4/LunGula/ci.yml?style=flat-square&label=CI)](https://github.com/CrOliX-AltF4/LunGula/actions)
 [![Python](https://img.shields.io/badge/python-%3E%3D3.10-555555?style=flat-square)](.)
 
 **replay → model**
@@ -19,7 +19,7 @@ _A game imitation learning framework. Feed it human replays — a trained ONNX m
 
 ## What it does
 
-Lun'Imago trains neural networks to imitate human game behavior from recorded replays, then exports them as ONNX models for use in any runtime (Python, Node.js, C++, etc.).
+Lun'Gula trains neural networks to imitate human game behavior from recorded replays, then exports them as ONNX models for use in any runtime (Python, Node.js, C++, etc.).
 
 ```
   human replays (.osr, ...)
@@ -51,26 +51,26 @@ Lun'Imago trains neural networks to imitate human game behavior from recorded re
 Why a framework instead of a one-off script? Every game needs only two things: a parser that decodes its replay format, and an encoder that normalizes game state into feature vectors. Everything else — the dataset, training loop, model architecture, device detection, and ONNX export — is shared.
 
 > [!NOTE]
-> "Imago" is the Latin word for _image_ or _likeness_. In biology, it is the final adult form reached after metamorphosis. A lun'imago model is the final learned likeness of a human player. Part of the [Lun' ecosystem](https://github.com/CrOliX-AltF4).
+> "Gula" is the sin of gluttony — consuming endlessly to grow stronger. A lun'gula model is trained by feeding on human replays until it has absorbed the patterns of play. Part of the [Lun' ecosystem](https://github.com/CrOliX-AltF4).
 
 ---
 
 ## Quick start
 
 ```bash
-git clone https://github.com/CrOliX-AltF4/LunImago.git
-cd LunImago
+git clone https://github.com/CrOliX-AltF4/LunGula.git
+cd LunGula
 pip install -e ".[dev]"
 
 # Train on osu! replays (one map per subdirectory: replay.osr + beatmap.osu)
-lunimago train --game osu --data ./data/replays --out ./checkpoints --export model.onnx
+lungula train --game osu --data ./data/replays --out ./checkpoints --export model.onnx
 ```
 
 ---
 
 ## Hardware support
 
-Lun'Imago auto-detects the best available backend:
+Lun'Gula auto-detects the best available backend:
 
 | Backend   | Hardware              | OS              | Install                     |
 |-----------|-----------------------|-----------------|-----------------------------|
@@ -87,8 +87,8 @@ Override with `--device cuda`, `--device directml`, `--device cpu`, etc.
 ## CLI
 
 ```bash
-lunimago train --game osu --data ./replays          # train with defaults
-lunimago train --game osu --data ./replays \
+lungula train --game osu --data ./replays          # train with defaults
+lungula train --game osu --data ./replays \
     --epochs 30 --batch 256 --window 48 \
     --device directml \
     --export model.onnx                              # full options
@@ -132,8 +132,8 @@ osu! replays are publicly available via the [osu! API](https://osu.ppy.sh/docs/i
 Implement two abstract classes and register a plugin module:
 
 ```python
-# lunimago/games/my_game/parser.py
-from lunimago.core.base_game import BaseReplayParser, GameFrame
+# lungula/games/my_game/parser.py
+from lungula.core.base_game import BaseReplayParser, GameFrame
 
 class MyGameParser(BaseReplayParser):
     @property
@@ -145,18 +145,18 @@ class MyGameParser(BaseReplayParser):
     def parse(self, replay_path: str, beatmap_path: str) -> list[GameFrame]:
         ...
 
-# lunimago/games/my_game/plugin.py
+# lungula/games/my_game/plugin.py
 def make_parser(): return MyGameParser()
 def make_model(): return LSTMAgent(feature_dim=12, action_dim=3)
 def collect_pairs(data_dir: str): ...
 ```
 
-Then register it in `lunimago/cli.py`:
+Then register it in `lungula/cli.py`:
 
 ```python
 GAMES: dict[str, str] = {
-    "osu":     "lunimago.games.osu.plugin",
-    "my_game": "lunimago.games.my_game.plugin",
+    "osu":     "lungula.games.osu.plugin",
+    "my_game": "lungula.games.my_game.plugin",
 }
 ```
 
@@ -165,7 +165,7 @@ GAMES: dict[str, str] = {
 ## Project structure
 
 ```
-lunimago/
+lungula/
 ├── core/
 │   ├── base_game.py        # BaseReplayParser, BaseGameEncoder, GameFrame
 │   ├── dataset.py          # ReplayDataset — sliding-window sequences
@@ -191,13 +191,13 @@ lunimago/
 | [LunAtar](https://github.com/CrOliX-AltF4/LunAtar) | AI dev pipeline — intent → code |
 | [LunAcedia](https://github.com/CrOliX-AltF4/LunAcedia) | Information infrastructure — events · actions · AI butler |
 | [LunAvaritia](https://github.com/CrOliX-AltF4/LunAvaritia) | Mobile companion — Android |
-| **LunImago** | Imitation learning — gameplay → ONNX policy |
+| **LunGula** | Imitation learning — gameplay → ONNX policy |
 | LunAnima | AI companion core — private |
 
 ---
 
 > [!WARNING]
-> Lun'Imago trains models from human replays. Model quality depends entirely on the quality and quantity of training data. A model trained on 50 replays will not generalize well — aim for 1 000+ for usable results.
+> Lun'Gula trains models from human replays. Model quality depends entirely on the quality and quantity of training data. A model trained on 50 replays will not generalize well — aim for 1 000+ for usable results.
 
 ---
 

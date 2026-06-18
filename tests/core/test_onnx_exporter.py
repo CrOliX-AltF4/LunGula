@@ -6,8 +6,8 @@ import pathlib
 import pytest
 import torch
 
-from lunimago.core.export.onnx_exporter import export_onnx
-from lunimago.core.models.lstm_agent import LSTMAgent
+from lungula.core.export.onnx_exporter import export_onnx
+from lungula.core.models.lstm_agent import LSTMAgent
 
 
 @pytest.fixture()

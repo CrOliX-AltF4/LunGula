@@ -10,7 +10,7 @@ from collections.abc import Generator
 
 import pytest
 
-from lunimago.games.osu.parser import (
+from lungula.games.osu.parser import (
     _ACTION_DIM,
     _FEATURE_DIM,
     OsuReplayParser,

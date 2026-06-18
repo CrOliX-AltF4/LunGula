@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from lunimago.core.models.lstm_agent import LSTMAgent
+from lungula.core.models.lstm_agent import LSTMAgent
 
 
 @pytest.fixture()

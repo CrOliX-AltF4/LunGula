@@ -2,7 +2,7 @@
 
 import torch
 
-from lunimago.core.device import resolve_device
+from lungula.core.device import resolve_device
 
 
 class TestResolveDevice:

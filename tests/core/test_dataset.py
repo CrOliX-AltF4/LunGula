@@ -4,8 +4,8 @@ import numpy as np
 import pytest
 import torch
 
-from lunimago.core.base_game import BaseReplayParser, GameFrame
-from lunimago.core.dataset import ReplayDataset
+from lungula.core.base_game import BaseReplayParser, GameFrame
+from lungula.core.dataset import ReplayDataset
 
 _FEATURE_DIM = 6
 _ACTION_DIM = 3

@@ -185,7 +185,7 @@ def save_progress(out_root: pathlib.Path, done: set[str]) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Collect osu! replay dataset for LunImago training"
+        description="Collect osu! replay dataset for LunGula training"
     )
     parser.add_argument("--beatmaps", type=int, default=100, help="Number of beatmaps to target")
     parser.add_argument("--replays", type=int, default=10, help="Max replays per beatmap")
@@ -304,7 +304,7 @@ def main() -> None:
     print()
     if len(done) >= 50:
         print("Next step:")
-        print(f"  py -3.11 -m lunimago train --game osu --data {out_root} \\")
+        print(f"  py -3.11 -m lungula train --game osu --data {out_root} \\")
         print("    --epochs 30 --batch 256 --window 32 --export model.onnx")
     else:
         print("Tip: aim for 1000+ pairs before training for production quality.")

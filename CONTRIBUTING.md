@@ -1,4 +1,4 @@
-# Contributing to Lun'Imago
+# Contributing to Lun'Gula
 
 Thank you for contributing! This guide will help you get started and ensure your contribution fits smoothly into the project.
 
@@ -33,8 +33,8 @@ This project adheres to the [Contributor Covenant](https://www.contributor-coven
 ### Setup
 
 ```bash
-git clone https://github.com/CrOliX-AltF4/LunImago.git
-cd LunImago
+git clone https://github.com/CrOliX-AltF4/LunGula.git
+cd LunGula
 pip install -e ".[dev]"
 ```
 
@@ -42,19 +42,19 @@ pip install -e ".[dev]"
 
 | Command                        | Description                              |
 |--------------------------------|------------------------------------------|
-| `lunimago train --game osu …` | Train a model on replay data             |
+| `lungula train --game osu …` | Train a model on replay data             |
 | `pytest`                       | Run all tests                            |
-| `pytest --cov=lunimago`       | Run tests with coverage report           |
+| `pytest --cov=lungula`       | Run tests with coverage report           |
 | `ruff check .`                 | Lint the codebase                        |
 | `ruff format .`                | Format the codebase                      |
-| `mypy lunimago`               | Type-check                               |
+| `mypy lungula`               | Type-check                               |
 
 ---
 
 ## Project structure
 
 ```
-lunimago/
+lungula/
 ├── core/
 │   ├── base_game.py        # BaseReplayParser, BaseGameEncoder, GameFrame
 │   ├── dataset.py          # ReplayDataset
@@ -65,7 +65,7 @@ lunimago/
 └── games/
     └── osu/                # osu! plugin (parser + plugin entry point)
 tests/
-├── core/                   # tests mirroring lunimago/core/
+├── core/                   # tests mirroring lungula/core/
 └── games/osu/              # tests for the osu! plugin
 ```
 
@@ -84,7 +84,7 @@ tests/
 3. **Make sure** all checks pass locally:
 
    ```bash
-   ruff check . && mypy lunimago && pytest
+   ruff check . && mypy lungula && pytest
    ```
 
 4. **Open a Pull Request** targeting `master`.
@@ -144,13 +144,13 @@ docs(contributing): add game plugin guide
 ## Tests
 
 - Framework: **pytest**
-- Tests live in `tests/` (mirroring the `lunimago/` structure)
+- Tests live in `tests/` (mirroring the `lungula/` structure)
 - Unit tests must not touch real replay files — use fixtures with synthetic data
 - Name test files `test_*.py`
 
 ```bash
 pytest                      # run all tests
-pytest --cov=lunimago      # with coverage
+pytest --cov=lungula      # with coverage
 pytest tests/core/          # specific directory
 ```
 
@@ -158,13 +158,13 @@ pytest tests/core/          # specific directory
 
 ## Adding a game plugin
 
-1. Create `lunimago/games/<your_game>/` with `parser.py` and `plugin.py`
+1. Create `lungula/games/<your_game>/` with `parser.py` and `plugin.py`
 2. Implement `BaseReplayParser` in `parser.py`
 3. Implement `make_parser()`, `make_model()`, `collect_pairs()` in `plugin.py`
-4. Register the plugin in `lunimago/cli.py` under `GAMES`
+4. Register the plugin in `lungula/cli.py` under `GAMES`
 5. Add tests in `tests/games/<your_game>/`
 
-See the [osu! plugin](lunimago/games/osu/) as a reference implementation.
+See the [osu! plugin](lungula/games/osu/) as a reference implementation.
 
 ---
 
