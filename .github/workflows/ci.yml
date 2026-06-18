@@ -23,7 +23,7 @@ jobs:
       - run: pip install -e ".[dev]"
       - run: ruff check .
       - run: ruff format --check .
-      - run: mypy lunimago
+      - run: mypy lungula
 
   test:
     name: Tests (Python ${{ matrix.python-version }})
@@ -38,7 +38,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
       - run: pip install -e ".[dev]"
-      - run: pytest --cov=lunimago --cov-report=term-missing
+      - run: pytest --cov=lungula --cov-report=term-missing
 
       - name: Upload coverage
         uses: codecov/codecov-action@v4
