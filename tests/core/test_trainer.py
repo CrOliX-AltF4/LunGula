@@ -42,6 +42,28 @@ class TestTrainer:
         assert "epoch" in history[0]
         assert "train" in history[0]
         assert "val" in history[0]
+        assert "lr" in history[0]
+
+    def test_lr_in_history_is_positive(self, trainer: Trainer, tiny_dataset: TensorDataset) -> None:
+        history = trainer.fit(tiny_dataset, epochs=2, batch_size=16)
+        for entry in history:
+            assert isinstance(entry["lr"], float)
+            assert entry["lr"] > 0
+
+    def test_grad_clip_param_accepted(self, tiny_dataset: TensorDataset) -> None:
+        model = LSTMAgent(feature_dim=_FEATURE_DIM, action_dim=_ACTION_DIM, hidden_size=32)
+        trainer = Trainer(model, torch.device("cpu"), lr=1e-3, grad_clip=0.5)
+        history = trainer.fit(tiny_dataset, epochs=1, batch_size=16)
+        assert len(history) == 1
+
+    def test_null_baseline_is_positive(self, trainer: Trainer, tiny_dataset: TensorDataset) -> None:
+        from torch.utils.data import DataLoader
+
+        loader: DataLoader[tuple[torch.Tensor, torch.Tensor]] = DataLoader(
+            tiny_dataset, batch_size=16
+        )
+        baseline = trainer._null_baseline(loader)
+        assert baseline > 0
 
     def test_epoch_numbers_are_sequential(
         self, trainer: Trainer, tiny_dataset: TensorDataset

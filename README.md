@@ -127,6 +127,79 @@ osu! replays are publicly available via the [osu! API](https://osu.ppy.sh/docs/i
 
 ---
 
+## Training guide
+
+### Dataset requirements
+
+Each map directory must contain exactly one replay + one beatmap:
+
+```
+data/replays/
+├── map_001/
+│   ├── replay.osr
+│   └── beatmap.osu
+├── map_002/
+│   └── ...
+```
+
+| Target difficulty | Min maps | Recommended |
+|---|---|---|
+| Normal (1.5–2.5★) | 50 | 200+ |
+| Hard (2.5–3.5★) | 100 | 500+ |
+
+**Diversity matters more than volume** — 200 maps across different BPMs, patterns, and mappers generalise far better than 500 replays of the same map.
+
+osu! replays are publicly available via the [osu! API](https://osu.ppy.sh/docs/index#get-apiv2beatmapsbeatidreplays).
+
+### Recommended command — osu! Normal maps
+
+```bash
+lungula train \
+  --game osu \
+  --data ./data/replays \
+  --out ./checkpoints \
+  --epochs 200 \
+  --batch 256 \
+  --window 32 \
+  --lr 1e-3 \
+  --device directml \
+  --export model.onnx
+```
+
+### Reading the output
+
+```
+[baseline] null model (predict-zero) MSE = 0.00318
+[001/200] train=0.03120  val=0.02891  lr=1.00e-03
+[006/200] train=0.00820  val=0.00711  lr=1.00e-03
+[012/200] train=0.00410  val=0.00390  lr=5.00e-04  ↓ lr=5.00e-04
+...
+[080/200] train=0.00028  val=0.00031  lr=1.25e-04
+```
+
+**Baseline MSE** — what a model predicting all zeros would score. Use it to calibrate your training loss.
+
+| val loss vs baseline | Verdict |
+|---|---|
+| `val > baseline` | Underfitting or data issue — check data quality first |
+| `val ≈ 0.5 × baseline` | Partial convergence — more epochs or data |
+| `val < 0.1 × baseline` | Good convergence — deploy and test |
+
+**LR drops** (marked `↓ lr=…`) happen after 5 epochs without val improvement. Two consecutive drops with no improvement → you can stop early.
+
+### Diagnosing cursor drift in the bot
+
+If the deployed model drifts toward a screen edge:
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `val > baseline` | Active underfitting | More data, check pipeline alignment |
+| `val ≈ 0.3–0.9 × baseline`, drift constant | Bias in training set | Add maps with varied note positions |
+| `val < 0.1 × baseline`, drift still present | Distribution shift | More map diversity; train on harder maps too |
+| Drift only at map start | Window not yet full (32 frames) | Normal — ignore first ~0.5s |
+
+---
+
 ## Adding a game
 
 Implement two abstract classes and register a plugin module:
@@ -188,7 +261,7 @@ lungula/
 
 | Project | Role |
 |---|---|
-| [LunAtar](https://github.com/CrOliX-AltF4/LunAtar) | AI dev pipeline — intent → code |
+| [LunIra](https://github.com/CrOliX-AltF4/LunIra) | AI dev pipeline — intent → code |
 | [LunAcedia](https://github.com/CrOliX-AltF4/LunAcedia) | Information infrastructure — events · actions · AI butler |
 | [LunAvaritia](https://github.com/CrOliX-AltF4/LunAvaritia) | Mobile companion — Android |
 | **LunGula** | Imitation learning — gameplay → ONNX policy |
