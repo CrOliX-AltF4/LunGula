@@ -10,6 +10,7 @@ from typing import Any, cast
 import torch
 import torch.nn as nn
 from torch.optim.adamw import AdamW
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader, Dataset, random_split
 from tqdm import tqdm
 
@@ -25,10 +26,13 @@ class Trainer:
         device: torch.device,
         lr: float = 1e-3,
         val_split: float = 0.1,
+        grad_clip: float = 1.0,
     ) -> None:
         self.model = model.to(device)
         self.device = device
+        self.grad_clip = grad_clip
         self.opt = AdamW(model.parameters(), lr=lr)
+        self.scheduler = ReduceLROnPlateau(self.opt, patience=5, factor=0.5)
         self.loss_fn = nn.MSELoss()
         self.val_split = val_split
 
@@ -58,12 +62,22 @@ class Trainer:
         train_dl: DataLoader[_Batch] = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
         val_dl: DataLoader[_Batch] = DataLoader(val_ds, batch_size=batch_size)
 
+        null_mse = self._null_baseline(val_dl)
+        print(f"[baseline] null model (predict-zero) MSE = {null_mse:.5f}")
+
         history: list[dict[str, Any]] = []
         for epoch in range(start_epoch, epochs + 1):
             train_loss = self._epoch(train_dl, train=True)
             val_loss = self._epoch(val_dl, train=False)
-            history.append({"epoch": epoch, "train": train_loss, "val": val_loss})
-            print(f"[{epoch:03d}/{epochs}] train={train_loss:.5f}  val={val_loss:.5f}")
+            current_lr = float(self.opt.param_groups[0]["lr"])
+
+            prev_lr = current_lr
+            self.scheduler.step(val_loss)
+            new_lr = float(self.opt.param_groups[0]["lr"])
+
+            history.append({"epoch": epoch, "train": train_loss, "val": val_loss, "lr": new_lr})
+            lr_tag = f"  ↓ lr={new_lr:.2e}" if new_lr < prev_lr else ""
+            print(f"[{epoch:03d}/{epochs}] train={train_loss:.5f}  val={val_loss:.5f}  lr={current_lr:.2e}{lr_tag}")
 
             if checkpoint_dir:
                 os.makedirs(checkpoint_dir, exist_ok=True)
@@ -73,6 +87,16 @@ class Trainer:
                 )
 
         return history
+
+    def _null_baseline(self, loader: DataLoader[_Batch]) -> float:
+        """MSE of a model that always predicts zeros — calibrates whether training is converging."""
+        total = 0.0
+        with torch.no_grad():
+            for _, y in loader:
+                y = y.to(self.device)
+                total += float(self.loss_fn(torch.zeros_like(y), y).item()) * len(y)
+        assert loader.dataset is not None
+        return total / len(cast(Sized, loader.dataset))
 
     def _epoch(self, loader: DataLoader[_Batch], *, train: bool) -> float:
         self.model.train(train)
@@ -85,6 +109,7 @@ class Trainer:
                 if train:
                     self.opt.zero_grad()
                     loss.backward()
+                    nn.utils.clip_grad_norm_(self.model.parameters(), self.grad_clip)
                     self.opt.step()
                 total += float(loss.item()) * len(x)
         assert loader.dataset is not None

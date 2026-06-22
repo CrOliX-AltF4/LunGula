@@ -26,6 +26,14 @@ def main() -> None:
     train.add_argument("--window", type=int, default=32, help="Context window size (frames)")
     train.add_argument("--device", default="auto", help="auto | cuda | directml | mps | cpu")
     train.add_argument("--export", default=None, help="Export final model to this .onnx path")
+    train.add_argument("--lr", type=float, default=1e-3, help="Initial learning rate (default: 1e-3)")
+    train.add_argument(
+        "--grad-clip",
+        type=float,
+        default=1.0,
+        dest="grad_clip",
+        help="Gradient clipping max norm (default: 1.0, 0 = disabled)",
+    )
     train.add_argument(
         "--resume",
         action="store_true",
@@ -65,7 +73,8 @@ def _cmd_train(args: argparse.Namespace) -> None:
     dataset = ReplayDataset(pairs, parser, window=args.window)
     print(f"Samples: {len(dataset)}")
 
-    trainer = Trainer(model, device)
+    grad_clip = args.grad_clip if args.grad_clip > 0 else float("inf")
+    trainer = Trainer(model, device, lr=args.lr, grad_clip=grad_clip)
     trainer.fit(
         dataset,
         epochs=args.epochs,
