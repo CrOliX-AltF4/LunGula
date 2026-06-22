@@ -72,7 +72,15 @@ def _cmd_train(args: argparse.Namespace) -> None:
         sys.exit(1)
 
     print(f"Replays: {len(pairs)}")
-    dataset = ReplayDataset(pairs, parser, window=args.window)
+    flip_feat = getattr(plugin, "FLIP_FEAT_Y", None)
+    flip_act = getattr(plugin, "FLIP_ACT_Y", None)
+    dataset = ReplayDataset(
+        pairs,
+        parser,
+        window=args.window,
+        flip_feat_indices=flip_feat,
+        flip_act_indices=flip_act,
+    )
     print(f"Samples: {len(dataset)}")
 
     grad_clip = args.grad_clip if args.grad_clip > 0 else float("inf")
