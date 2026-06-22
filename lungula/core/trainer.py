@@ -77,7 +77,9 @@ class Trainer:
 
             history.append({"epoch": epoch, "train": train_loss, "val": val_loss, "lr": new_lr})
             lr_tag = f"  ↓ lr={new_lr:.2e}" if new_lr < prev_lr else ""
-            print(f"[{epoch:03d}/{epochs}] train={train_loss:.5f}  val={val_loss:.5f}  lr={current_lr:.2e}{lr_tag}")
+            print(
+                f"[{epoch:03d}/{epochs}] train={train_loss:.5f}  val={val_loss:.5f}  lr={current_lr:.2e}{lr_tag}"
+            )
 
             if checkpoint_dir:
                 os.makedirs(checkpoint_dir, exist_ok=True)

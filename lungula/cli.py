@@ -26,7 +26,9 @@ def main() -> None:
     train.add_argument("--window", type=int, default=32, help="Context window size (frames)")
     train.add_argument("--device", default="auto", help="auto | cuda | directml | mps | cpu")
     train.add_argument("--export", default=None, help="Export final model to this .onnx path")
-    train.add_argument("--lr", type=float, default=1e-3, help="Initial learning rate (default: 1e-3)")
+    train.add_argument(
+        "--lr", type=float, default=1e-3, help="Initial learning rate (default: 1e-3)"
+    )
     train.add_argument(
         "--grad-clip",
         type=float,

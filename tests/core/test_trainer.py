@@ -58,7 +58,10 @@ class TestTrainer:
 
     def test_null_baseline_is_positive(self, trainer: Trainer, tiny_dataset: TensorDataset) -> None:
         from torch.utils.data import DataLoader
-        loader: DataLoader[tuple[torch.Tensor, torch.Tensor]] = DataLoader(tiny_dataset, batch_size=16)
+
+        loader: DataLoader[tuple[torch.Tensor, torch.Tensor]] = DataLoader(
+            tiny_dataset, batch_size=16
+        )
         baseline = trainer._null_baseline(loader)
         assert baseline > 0
 
