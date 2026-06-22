@@ -7,6 +7,12 @@ import os
 from ...core.models.lstm_agent import LSTMAgent
 from .parser import _ACTION_DIM, _FEATURE_DIM, OsuReplayParser
 
+# Vertical Y-axis flip augmentation indices for the osu! feature/action layout.
+# Feature vector (dim=10): [0]dx [1]dy [2]timeToNext [3]n0x [4]n0y [5]n1x [6]n1y [7]n2x [8]n2y [9]combo
+# Action vector (dim=4):   [0]cursorDx [1]cursorDy [2]lClick [3]rClick
+FLIP_FEAT_Y: tuple[int, ...] = (1, 4, 6, 8)
+FLIP_ACT_Y: tuple[int, ...] = (1,)
+
 
 def make_parser() -> OsuReplayParser:
     return OsuReplayParser()
