@@ -188,7 +188,7 @@ lungula/
 
 | Project | Role |
 |---|---|
-| [LunAtar](https://github.com/CrOliX-AltF4/LunAtar) | AI dev pipeline — intent → code |
+| [LunIra](https://github.com/CrOliX-AltF4/LunIra) | AI dev pipeline — intent → code |
 | [LunAcedia](https://github.com/CrOliX-AltF4/LunAcedia) | Information infrastructure — events · actions · AI butler |
 | [LunAvaritia](https://github.com/CrOliX-AltF4/LunAvaritia) | Mobile companion — Android |
 | **LunGula** | Imitation learning — gameplay → ONNX policy |
