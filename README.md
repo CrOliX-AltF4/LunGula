@@ -14,6 +14,8 @@ _A game imitation learning framework. Feed it human replays — a trained ONNX m
 
 > [!NOTE]
 > Fully standalone — any runtime that can load ONNX models can consume the output (Python, Node.js, C++). Part of the [Lun' ecosystem](https://github.com/CrOliX-AltF4).
+>
+> **Doctrine** — ecosystem constitution and standards live in LunAnima's `docs/constitution.md` and `docs/standards/` (private repo). This project is currently classified **Gelé** (frozen) there — see LunAnima's Standing Challenge C-009 for why, and what would reopen active investment here.
 
 ---
 
