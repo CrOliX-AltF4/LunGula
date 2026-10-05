@@ -142,7 +142,7 @@ def _cmd_train(args: argparse.Namespace) -> None:
     # rather than a hard kill. Trainer.fit() only checks this between epochs — after
     # that epoch's checkpoint is already on disk — so a stop never loses progress or
     # leaves a half-written checkpoint, unlike the raw Ctrl-C that produced the
-    # interrupted, never-converged run behind CLAUDE.md's C-009.
+    # interrupted, never-converged run that once shipped.
     #
     # Two independent triggers, because neither alone covers every real caller:
     #   - SIGTERM/SIGINT: works for a human's own Ctrl-C in an interactive terminal.

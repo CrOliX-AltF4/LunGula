@@ -64,7 +64,7 @@ class TestOnnxExporter:
     def test_writes_a_provenance_manifest_alongside_the_export(
         self, model: LSTMAgent, tmp_path: pathlib.Path
     ) -> None:
-        # This is the actual fix for CLAUDE.md's C-009: a model with no recorded
+        # This is the actual fix for an unconverged model that once shipped: a model with no recorded
         # provenance (which checkpoint, which epoch, what loss it reached) is how an
         # interrupted, never-converged run silently ended up wired into production.
         path = str(tmp_path / "model.onnx")
