@@ -2,9 +2,9 @@
 
 # ◆ Lun'Gula
 
-[![License](https://img.shields.io/badge/license-MIT-333333?style=flat-square)](LICENSE)
 [![CI](https://img.shields.io/github/actions/workflow/status/CrOliX-AltF4/LunGula/ci.yml?style=flat-square&label=CI)](https://github.com/CrOliX-AltF4/LunGula/actions)
 [![Python](https://img.shields.io/badge/python-%3E%3D3.10-555555?style=flat-square)](.)
+[![License](https://img.shields.io/badge/license-MIT-333333?style=flat-square)](LICENSE)
 
 **replay → model**
 
@@ -13,7 +13,8 @@ _A game imitation learning framework. Feed it human replays — a trained ONNX m
 </div>
 
 > [!NOTE]
-> Fully standalone — any runtime that can load ONNX models can consume the output (Python, Node.js, C++). Part of the [Lun' ecosystem](https://github.com/CrOliX-AltF4).
+> **Status: paused** — usable as it is, not actively developed for now. Fully standalone: any runtime that can load ONNX
+> models can consume its output (Python, Node.js, C++). Part of the [Lun' ecosystem](https://github.com/CrOliX-AltF4).
 
 ---
 
@@ -49,9 +50,6 @@ Lun'Gula trains neural networks to imitate human game behavior from recorded rep
 ```
 
 Why a framework instead of a one-off script? Every game needs only two things: a parser that decodes its replay format, and an encoder that normalizes game state into feature vectors. Everything else — the dataset, training loop, model architecture, device detection, and ONNX export — is shared.
-
-> [!NOTE]
-> "Gula" is the sin of gluttony — consuming endlessly to grow stronger. A lun'gula model is trained by feeding on human replays until it has absorbed the patterns of play. Part of the [Lun' ecosystem](https://github.com/CrOliX-AltF4).
 
 ---
 
@@ -235,7 +233,7 @@ GAMES: dict[str, str] = {
 
 ---
 
-## Project structure
+## Architecture
 
 ```
 lungula/
@@ -257,27 +255,36 @@ lungula/
 
 ---
 
-## Lun ecosystem
-
-| Project | Role |
-|---|---|
-| [LunIra](https://github.com/CrOliX-AltF4/LunIra) | AI dev pipeline — intent → code |
-| [LunAcedia](https://github.com/CrOliX-AltF4/LunAcedia) | Information infrastructure — events · actions · AI butler |
-| [LunAvaritia](https://github.com/CrOliX-AltF4/LunAvaritia) | Mobile companion — Android |
-| **LunGula** | Imitation learning — gameplay → ONNX policy |
-| LunAnima | AI companion core — private |
+> [!WARNING]
+> Lun'Gula trains models from human replays. Model quality depends entirely on the quality and quantity of training data. A model trained on 50 replays will not generalize well — aim for 1 000+ for usable results.
 
 ---
 
-> [!WARNING]
-> Lun'Gula trains models from human replays. Model quality depends entirely on the quality and quantity of training data. A model trained on 50 replays will not generalize well — aim for 1 000+ for usable results.
+## Development
+
+```bash
+pip install -e ".[dev]"
+ruff check .
+ruff format --check .
+mypy lungula
+pytest
+```
+
+---
+
+## Lun' ecosystem
+
+| Project | Role | Status |
+|---|---|---|
+| [Lun'Ira](https://github.com/CrOliX-AltF4/LunIra) | AI dev pipeline — intent → code | Active |
+| [Lun'Acedia](https://github.com/CrOliX-AltF4/LunAcedia) | Your box and your day — events · actions · agent | In development |
+| [Lun'Avaritia](https://github.com/CrOliX-AltF4/LunAvaritia) | Lun'Acedia in your pocket — Android | In development |
+| **Lun'Gula** | Imitation learning — replays → ONNX model | Paused |
 
 ---
 
 <div align="center">
 
 Built by **[CrOliX-AltF4](https://github.com/CrOliX-AltF4)** · MIT License · © 2026
-
-_Where observed play finds its learned form._
 
 </div>
