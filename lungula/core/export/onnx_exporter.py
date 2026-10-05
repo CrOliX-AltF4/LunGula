@@ -22,9 +22,9 @@ def export_onnx(
 ) -> None:
     """Export model to ONNX, plus a `<output_path>.manifest.json` recording where the
     weights actually came from — which checkpoint, which epoch, what loss it reached,
-    and when. Consumers (e.g. Natsume's panel) can show real provenance instead of a
+    and when. Consumers (e.g. a hub's panel) can show real provenance instead of a
     bare file with no history, which is what let an unconverged, interrupted training
-    run silently end up in production before (CLAUDE.md §7, C-009).
+    run silently end up in production before.
 
     The exported model takes a single input:
       context: float32[1, window, feature_dim]
