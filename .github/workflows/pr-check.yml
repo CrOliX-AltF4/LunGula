@@ -54,3 +54,26 @@ jobs:
           message_if_xl: |
             This PR is very large (> 1000 lines changed).
             Consider splitting it into smaller, focused PRs for easier review.
+
+  version-notice:
+    name: Release notice — version unchanged (feat/fix)
+    runs-on: ubuntu-latest
+    # Never blocking: versions are set once, at the end of a working session, in a chore(release) PR. A feat/fix PR
+    # merged without a new version does not ship on its own — said here, so it is never forgotten silently.
+    if: startsWith(github.event.pull_request.title, 'feat') || startsWith(github.event.pull_request.title, 'fix')
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compare version against master
+        run: |
+          git fetch origin master --depth=1
+          base=$(git show origin/master:pyproject.toml | python3 -c "import sys,tomllib; print(tomllib.loads(sys.stdin.read())['project']['version'])")
+          head=$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
+          if [ "$base" = "$head" ]; then
+            echo "::warning::pyproject.toml version ($head) unchanged from master — this PR does not ship on its own; it ships with the version bump at the end of the session."
+            echo "Version $head unchanged: not released by this PR (bump at the end of the session)." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Version $base → $head: merging this PR releases it." >> "$GITHUB_STEP_SUMMARY"
+          fi
